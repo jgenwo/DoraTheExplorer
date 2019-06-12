@@ -24,8 +24,17 @@ void init_PWM()
     PWM1CON1bits.PMOD1 = 1; // Define independent mode for PWM output pair 1
     
     P1TPERbits.PTPER = 100; // PWM will count "up to 100" before resetting
-    
-    P1DC1 = 50; // Will be active till count goes to 50
+
+	/* THIS IS THE KEY VARIABLE TO CHANGE SPEED WITH
+	* The duty cycle basically calculates as:
+	* P1DC1/PxTPERbits.PTPER , where x denotes the number of the PWM module
+	* Raising PxDCy increases speed and vice versa.
+	* Here, x stands for the PWM module number and y for the PWM output channel
+	* number of that module
+	* Raising PTPER allows smaller increments (e.g. 100 allows increments of 1/100)
+	* but makes the puls width bigger, decreasing smoothness of V curve
+	*/
+	P1DC1 = 50; // PWM output will be active till count goes to 50
     // P1DC2 = 50; // Will be active till count goes to 50
     
     PWM1CON1bits.PEN1H = 0; // PWM1H is controlled by GPIO module
