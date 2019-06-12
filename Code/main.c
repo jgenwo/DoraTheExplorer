@@ -49,6 +49,7 @@
 #include "uart.h"
 #include "adc.h"
 #include "dma.h"
+#include "pwm.h"
 
 #define IN_SIMULATION_MODE  0
 
@@ -71,10 +72,11 @@ int main(void)
     initIO();
     initTimer1(6250); //6250 gives 10ms timer interrupt, based on a 1.6 us base = 40MIPS with 64 prescaler
     startTimer1();
+    init_PWM();
     //initUART();
-    setupADC1();
-    startADC1();
-    initDmaChannel4();
+    //setupADC1();
+    //startADC1();
+    //initDmaChannel4();
     while(1)
     {      
 
