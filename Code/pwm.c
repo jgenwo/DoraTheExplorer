@@ -8,6 +8,9 @@
 
 #include "xc.h"
 #include "gpio.h"
+#include "dma.h"
+#include <stdio.h>
+
 
 void init_PWM()
 {
@@ -36,4 +39,21 @@ void init_PWM()
     HBRIDGE2 = 0; // An output for H-Bridge logic input
     
     // No deadtime inserted yet, as it seems irrelevant right now
+}
+
+
+void test_PWM()
+{
+    if(adcData[0]<0){
+        HBRIDGE1 = 1; // An output for H-Bridge logic input
+        HBRIDGE2 = 0; // An output for H-Bridge logic input
+    }
+    else if(adcData[0]<1000){
+        HBRIDGE1 = 0; // An output for H-Bridge logic input
+        HBRIDGE2 = 1; // An output for H-Bridge logic input
+    }
+    else{
+        HBRIDGE1 = 1; // An output for H-Bridge logic input
+        HBRIDGE2 = 0; // An output for H-Bridge logic input
+    }
 }

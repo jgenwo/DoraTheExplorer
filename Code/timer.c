@@ -1,6 +1,8 @@
 
 #include "timer.h"
 #include "gpio.h"
+#include "uart.h"
+#include "dma.h"
 
 
 void initTimer1(unsigned int period) 
@@ -39,6 +41,12 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         else
         {
             LED = ~LED;
+            char str[3];
+            sprintf(str, "%d", adcData[0]);
+            U1TXREG = str[0];
+            U1TXREG = str[1];
+            U1TXREG = str[2];
+            U1TXREG = " ";
             count=0;
         }
 

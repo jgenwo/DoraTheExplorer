@@ -30,7 +30,8 @@
 // more than once.  
 #ifndef PWM_H
 #define	PWM_H
-    #include "xc.h"
-    void init_PWM(void);
+#include "xc.h"
+void init_PWM(void);
+void test_PWM(void);
 #endif	/* PWM_H */
 

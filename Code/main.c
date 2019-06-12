@@ -69,17 +69,17 @@ int main(void)
     {
         while (OSCCONbits.LOCK != 1); //Wait for PPL to lock
     }
+    initUART();
     initIO();
     initTimer1(6250); //6250 gives 10ms timer interrupt, based on a 1.6 us base = 40MIPS with 64 prescaler
     startTimer1();
+    initDmaChannel4();
+    setupADC1();
+    startADC1();
     init_PWM();
-    //initUART();
-    //setupADC1();
-    //startADC1();
-    //initDmaChannel4();
     while(1)
     {      
-
+        //test_PWM();
 
     };
     return 0;
