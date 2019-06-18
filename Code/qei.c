@@ -5,12 +5,6 @@
 
 void init_QEI(void)
 {
-    //I now set A1 to RP12, B1 to RP13, A2 to RP2 (pin 6) and B2 to RP10 (pin 21).
-    RPINR14bits.QEA1R = 0xC; // Configure QEI RP12 channel A1 pin 23
-    RPINR14bits.QEB1R = 0xD; // Configure QEI RP13 channel B1 pin 24
-    RPINR16bits.QEA2R = 0xC; // Configure QEI RP2 channel A2 pin 6
-    RPINR16bits.QEB2R = 0xD; // Configure QEI RP10 channel B2 pin 21
-
     // Configure QEI module
     // QEIEN - QEI enable/disable  Count Error Status Flag bit
     QEI1CONbits.CNTERR = 0; //CNTERR

@@ -28,7 +28,7 @@ void initUART()
     //U1TXREG = 'a';                            // Transmit one character
 }
 
-void __attribute__((__interrupt__)) _U1TXInterrupt(void)
+void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void)
 {
     IFS0bits.U1TXIF = 0; // Clear TX Interrupt flag
     //U1TXREG = 'a';                            // Transmit one character
