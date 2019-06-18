@@ -6,24 +6,20 @@
  */
 
 #ifndef DMA_H
-#define	DMA_H
+#define DMA_H
 
-#ifdef	__cplusplus
-extern "C" {
+#ifdef __cplusplus
+extern "C"
+{
 #endif
 #include <xc.h>
-extern unsigned int adcData[32]__attribute__((space(dma)));
-//void initDmaChannel2(void);
-//void initDmaChannel3(void);
-void initDmaChannel4(void);
+    extern unsigned int adcData[32] __attribute__((space(dma)));
+    //void initDmaChannel2(void);
+    //void initDmaChannel3(void);
+    void initDmaChannel4(void);
 
-
-
-
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* DMA_H */
-
+#endif /* DMA_H */

@@ -6,18 +6,16 @@
  */
 
 #ifndef QEI_H
-#define	QEI_H
+#define QEI_H
 
-#ifdef	__cplusplus
-extern "C" {
+#ifdef __cplusplus
+extern "C"
+{
 #endif
 
 
-
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
-
-#endif	/* QEI_H */
-
+void init_QEI();
+#endif /* QEI_H */

@@ -27,11 +27,10 @@
  */
 
 // This is a guard condition so that contents of this file are not included
-// more than once.  
+// more than once.
 #ifndef PWM_H
-#define	PWM_H
+#define PWM_H
 #include "xc.h"
 void init_PWM(void);
 void test_PWM(void);
-#endif	/* PWM_H */
-
+#endif /* PWM_H */

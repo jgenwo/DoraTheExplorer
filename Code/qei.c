@@ -1,23 +1,28 @@
-#include "qei.h" 
+#include "qei.h"
 #include "xc.h"
 #include "p33FJ128MC802.h"
-   
+#include "gpio.h"
 
 void init_QEI(void)
 {
-    RPINR14bits.QEA1R = 00001100; // Configure QEI pin 12 channel A 
-    RPINR14bits.QEB1R = 00001101; // Configure QEI pin 13 channel B    
-    
+    //I now set A1 to RP12, B1 to RP13, A2 to RP2 (pin 6) and B2 to RP10 (pin 21).
+    RPINR14bits.QEA1R = 0xC; // Configure QEI RP12 channel A1 pin 23
+    RPINR14bits.QEB1R = 0xD; // Configure QEI RP13 channel B1 pin 24
+    RPINR16bits.QEA2R = 0xC; // Configure QEI RP2 channel A2 pin 6
+    RPINR16bits.QEB2R = 0xD; // Configure QEI RP10 channel B2 pin 21
+
     // Configure QEI module
-    
     // QEIEN - QEI enable/disable  Count Error Status Flag bit
-    //QEI1CONbits.QEIEN = 0; //CNTERR
+    QEI1CONbits.CNTERR = 0; //CNTERR
+    QEI2CONbits.CNTERR = 0;
     // QEISIDL - Idle mode 0=continue, 1=stop
-    QEICONbits.QEISIDL = 1; //QEICONbits.QEISIDL // Discontinue operation when in idle mode
+    QEI1CONbits.QEISIDL = 1; //QEICONbits.QEISIDL // Discontinue operation when in idle mode
+    QEI2CONbits.QEISIDL = 1;
     //INDEX: Index Pin State Status bit (read-only)
     //QEI1CONbits.INDEX = 0; // 1 = Index pin is high 0 = Index pin is low
     //UPDN: Position Counter Direction Status bit
     QEI1CONbits.UPDN = 0; // 1 positive/0 negative
+    QEI2CONbits.UPDN = 0; // 1 positive/0 negative
 
     /*
      * QEIM<2:0>: Quadrature Encoder Interface Mode Select bits
@@ -31,48 +36,61 @@ void init_QEI(void)
      * 000 = Quadrature Encoder Interface/Timer off
      * From example QEIM = 0b111; // x4 edge gain and reset POSCNT when == MAXCNT
      */
-    QEI1CONbits.QEIM = 0;
-    
+    QEI1CONbits.QEIM = 0b111;
+    QEI2CONbits.QEIM = 0b111;
+
     //SWPAB: Phase A and Phase B Input Swap Select bit
     QEI1CONbits.SWPAB = 0; // Do not swap the polarity of phase comparison
-    
-    //PCDOUT: Position Counter Direction State Output Enable bit 
-    QEICONbits.PCDOUT = 0; // Disable counter direction pin (normal I/O operation)
-    
+    QEI2CONbits.SWPAB = 0;
+
+    //PCDOUT: Position Counter Direction State Output Enable bit
+    QEI1CONbits.PCDOUT = 0; // Disable counter direction pin (normal I/O operation)
+    QEI2CONbits.PCDOUT = 0;
+
     // TQGATE: Timer Gated Time Accumulation Enable bit
-    QEICONbits.TQGATE = 0;
-    
+    QEI1CONbits.TQGATE = 0;
+    QEI2CONbits.TQGATE = 0;
+
     //POSRES: Position Counter Reset Enable bit
-    QEICONbits.POSRES = 0; // index pulse does not reset POSCNT
-    
+    QEI1CONbits.POSRES = 0; // index pulse does not reset POSCNT
+    QEI2CONbits.POSRES = 0;
+
     //TQCS: Timer Clock Source Select bitTQCS: Timer Clock Source Select bit
-    QEICONbits.TQCS = 0; // internal clock source (Tcy)
-    
+    QEI1CONbits.TQCS = 0; // internal clock source (Tcy)
+    QEI2CONbits.TQCS = 0;
 
-    DFLTCONbits.QEOUT = 0; // disable digital filters bit 7
-    
+    DFLT1CONbits.QEOUT = 0; // disable digital filters bit 7
+    DFLT2CONbits.QEOUT = 0;
+
     // set initial counter value and maximum range
-    MAXCNT = 0xffff; // set the highest possible time out
-    POSCNT = 0x7fff; // set POSCNT into middle of range
+    MAX1CNT = 0xffff; // set the highest possible time out
+    POS1CNT = 0x7fff; // set POSCNT into middle of range
+    MAX2CNT = 0xffff;
+    POS2CNT = 0x7fff;
+
+    // Configure Interrupt controller for QEI 1 - first motor
+    IFS3bits.QEI1IF = 0;  // clear interrupt flag
+    IEC3bits.QEI1IE = 1;  // enable QEI interrupt
+    IPC14bits.QEI1IP = 5; // set QEI interrupt priority
+
+    // Configure Interrupt controller for QEI 2 - second motor
+    IFS4bits.QEI2IF = 0;  // clear interrupt flag
+    IEC4bits.QEI2IE = 1;  // enable QEI interrupt
+    IPC18bits.QEI2IP = 5; // set QEI interrupt priority
+
+    U1TXREG = 'I'; // Transmit one character
 }
-    /*
-     
-    // Configure Interrupt controller
-    IFS2bits.QEIIF = 0; // clear interrupt flag
-    IEC2bits.QEIIE = 1; // enable QEI interrupt
-    IPC10bits.QEIIP = 5; // set QEI interrupt priority
-    }
 
-
-    // interrupt service routine
-   void __attribute__((interrupt, auto_psv)) _QEIInterrupt(void)
-    {
-    IFS2bits.QEIIF = 0; // clear interrupt flag
-    if(POSCNT<32768)
-    xx_xx++; // over-run condition caused interrupt
+// interrupt service routine that resets the position counter for the QEI 1
+void __attribute__((interrupt, no_auto_psv)) _QEI1Interrupt(void)
+{
+    IFS3bits.QEI1IF = 0;  // clear interrupt flag
+    if (POS1CNT < 0x7fff) //less than half of maxcount 32768
+                          //longpos + 0xFFFF + 1; // overflow condition caused interrupt
+        U1TXREG = 'o';
     else
-    xx_xx--; // under-run condition caused interrupt
-    }
-     * 
-     * */
+        //longpos - 0xFFFF - 1; // underflow condition caused interrupt
+        U1TXREG = 'u';
+}
 
+// another timer interrupt for accessing the position
