@@ -89,28 +89,28 @@ void test_PWM()
 // The HBRIDGE settings depend on where +/- of the motors is put and which pins
 // go exactly where. The current ones are completely arbitrary as
 // "placeholders" for future values with the board
-void drive_motor_1_forward(unsigned int dutycycle)
+void drive_motor_1_forward(int dutycycle)
 {
 	HBRIDGE1 = 1;
 	HBRIDGE2 = 0;
 	P1DC1 = dutycycle;
 }
 
-void drive_motor_1_backward(unsigned int dutycycle)
+void drive_motor_1_backward(int dutycycle)
 {
 	HBRIDGE1 = 0;
 	HBRIDGE2 = 1;
 	P1DC1 = dutycycle;
 }
 
-void drive_motor_2_forward(unsigned int dutycycle)
+void drive_motor_2_forward(int dutycycle)
 {
 	HBRIDGE3 = 1;
 	HBRIDGE4 = 0;
 	P1DC2 = dutycycle;
 }
 
-void drive_motor_2_backward(unsigned int dutycycle)
+void drive_motor_2_backward(int dutycycle)
 {
 	HBRIDGE3 = 0;
 	HBRIDGE4 = 1;
