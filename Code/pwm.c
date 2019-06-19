@@ -20,7 +20,7 @@ void init_PWM()
     P1TCONbits.PTMOD = 0; // Define free running mode for PWM 1
 
     PWM1CON1bits.PMOD1 = 1; // Define independent mode for PWM output pair 1
-    PWM1CON2bits.PMOD2 = 1; // Define independent mode for PWM output pair 2
+    PWM1CON1bits.PMOD2 = 1; // Define independent mode for PWM output pair 2
 
     P1TPERbits.PTPER = 2000; // PWM will count "up to 100" before resetting
 
