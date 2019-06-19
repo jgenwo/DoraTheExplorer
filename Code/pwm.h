@@ -37,4 +37,6 @@ void drive_motor_1_forward(unsigned int dutycycle)
 void drive_motor_1_backward(unsigned int dutycycle)
 void drive_motor_2_forward(unsigned int dutycycle)
 void drive_motor_2_backward(unsigned int dutycycle)
+void fast_stop_motor1()
+void fast_stop_motor2()
 #endif /* PWM_H */

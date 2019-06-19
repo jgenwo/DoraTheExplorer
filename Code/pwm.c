@@ -116,3 +116,13 @@ void drive_motor_2_backward(unsigned int dutycycle)
 	HBRIDGE4 = 1;
 	P1DC2 = dutycycle;
 }
+
+void fast_stop_motor1()
+{
+	HBRIDGE1 = HBRIDGE2;
+}
+
+void fast_stop_motor2()
+{
+	HBRIDGE3 = HBRIDGE4;
+}
