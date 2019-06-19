@@ -20,7 +20,7 @@ void init_PWM()
     P1TCONbits.PTMOD = 0; // Define free running mode for PWM 1
 
     PWM1CON1bits.PMOD1 = 1; // Define independent mode for PWM output pair 1
-    PWM1CON2bits.PMOD2 = 1;
+    PWM1CON2bits.PMOD2 = 1; // Define independent mode for PWM output pair 2
 
     P1TPERbits.PTPER = 2000; // PWM will count "up to 100" before resetting
 
@@ -33,9 +33,9 @@ void init_PWM()
 	* Raising PTPER allows smaller increments (e.g. 100 allows increments of 1/100)
 	* but makes the puls width bigger, decreasing smoothness of V curve
 	*/
-    P1DC1 = 1000; // PWM output will be active till count goes to 500
+    P1DC1 = 1000; // PWM output will be active till count goes to 1000
 
-    P1DC3 = 1000; // PWM output will be active till count goes to 600
+    P1DC2 = 1000; // PWM output will be active till count goes to 1000
 
     PWM1CON1bits.PEN1H = 0; // PWM1H is controlled by GPIO module
 
@@ -84,4 +84,35 @@ void test_PWM()
         HBRIDGE3 = 0; // An output for H-Bridge logic input
         HBRIDGE4 = 1; // An output for H-Bridge logic input
     }
+}
+
+// The HBRIDGE settings depend on where +/- of the motors is put and which pins
+// go exactly where. The current ones are completely arbitrary as
+// "placeholders" for future values with the board
+void drive_motor_1_forward(unsigned int dutycycle)
+{
+	HBRIDGE1 = 1;
+	HBRIDGE2 = 0;
+	P1DC1 = dutycycle;
+}
+
+void drive_motor_1_backward(unsigned int dutycycle)
+{
+	HBRIDGE1 = 0;
+	HBRIDGE2 = 1;
+	P1DC1 = dutycycle;
+}
+
+void drive_motor_2_forward(unsigned int dutycycle)
+{
+	HBRIDGE3 = 1;
+	HBRIDGE4 = 0;
+	P1DC2 = dutycycle;
+}
+
+void drive_motor_2_backward(unsigned int dutycycle)
+{
+	HBRIDGE3 = 0;
+	HBRIDGE4 = 1;
+	P1DC2 = dutycycle;
 }
