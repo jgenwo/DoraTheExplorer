@@ -2,9 +2,11 @@
 #include "timer.h"
 #include "gpio.h"
 #include "uart.h"
-#include "dma.h"
 #include "xc.h"
+#include "dma.h"
+#include "sensor.h"
 #include "stdio.h"
+
 
 void initTimer1(unsigned int period)
 {
@@ -40,12 +42,13 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     else
     {
         LED = ~LED;
-        char str[3];
-        sprintf(str, "%d", POS1CNT);
-        U1TXREG = str[0];
-        U1TXREG = str[1];
-        U1TXREG = str[2];
-        U1TXREG = " ";
         count = 0;
+                    
+    int val = distance(adcData[0]);
+    char str[2];
+    sprintf(str, "%d", val);
+    U1TXREG = str[0];
+    U1TXREG = str[1];
+    U1TXREG = ' ';    
     }
 }
