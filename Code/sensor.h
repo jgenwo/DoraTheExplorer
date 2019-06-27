@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-int distance();
+int distance(char sensor);
 int rightWall();
 int leftWall();
 int middle();

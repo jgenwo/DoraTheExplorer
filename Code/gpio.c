@@ -14,15 +14,15 @@ void initIO()
     //all pins are inputs by default
 
     //outputs
-    TRISCbits.TRISC4 = 0; //LEDBack output
+    TRISCbits.TRISC4 = 0; //LEDBack output / NOT WORKING YET
     TRISCbits.TRISC3 = 0; //LEDFront output
 
     // ******* Configure two bits as output bits for the first hbridge
-    TRISAbits.TRISA7 = 0; // HBRIDGE1 (Pin 15)
-    TRISBbits.TRISB14 = 0; //HBRIDGE2 (Pin 16)
+    TRISAbits.TRISA7 = 0;
+    TRISBbits.TRISB14 = 0; 
     // ******* Configure two bits as output bits for the second hbridge
-    TRISBbits.TRISB9 = 0; // HBRIDGE3 (Pin 11)
-    TRISCbits.TRISC6 = 0; //HBRIDGE4 (Pin 12)
+    TRISBbits.TRISB9 = 0; 
+    TRISCbits.TRISC6 = 0; 
     // ******* H-Bridge Part over
 
     // set up remappable pins
