@@ -46,7 +46,7 @@ void send(char msg[]){
         for (i = 0; i < n ; i++){
             U1TXREG = msg[i];
         } 
-        U1TXREG = ' ';
+        U1TXREG = '#';
     }
     else{
         for (j = 0; j <= n/4; j++){
@@ -57,6 +57,6 @@ void send(char msg[]){
             //wait
             }
         }
-        U1TXREG = ' ';
+        U1TXREG = '#';
     }    
 }
