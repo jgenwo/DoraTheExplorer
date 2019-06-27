@@ -41,14 +41,9 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     }
     else
     {
-        LED = ~LED;
+        LED_Back = ~LED_Back;
+        LED_Front = ~LED_Front;
+        send("hi there i m a loooong message");
         count = 0;
-                    
-    int val = distance(adcData[0]);
-    char str[2];
-    sprintf(str, "%d", val);
-    U1TXREG = str[0];
-    U1TXREG = str[1];
-    U1TXREG = ' ';    
     }
 }

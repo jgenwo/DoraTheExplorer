@@ -1,6 +1,5 @@
 #include "qei.h"
 #include "xc.h"
-#include "p33FJ128MC802.h"
 #include "gpio.h"
 
 void init_QEI(void)
