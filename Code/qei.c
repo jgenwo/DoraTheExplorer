@@ -79,14 +79,16 @@ void init_QEI(void)
     U1TXREG = 'I'; // Transmit one character
 }
 
-void calculate_speed(int new_count){
+void calculate_speed(void){
     static int old_count = 0;
+    static int new_count = 0;
     // calculate current speed. This function is supposed to be called in a
     // regular timer. The speed is given in: counts/timer_period
     // where counts is the number of QEI counts since this function was last
     // called and timer_period is the time between two calls of this function
     // This could easily be extended to give a time as well to calculate RPM or
     // something.
+    new_count = longpos + POS1CNT;
     current_speed = new_count - old_count;
     old_count = new_count;
 }
