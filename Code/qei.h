@@ -22,5 +22,5 @@ extern "C"
 }
 #endif
 void init_QEI();
-void calculate_speed(int new_count);
+void calculate_speed(void);
 #endif /* QEI_H */
