@@ -2,6 +2,8 @@
 #include "xc.h"
 #include "gpio.h"
 
+long int longpos = 0; // Initialize long position count overflow variable
+
 void init_QEI(void)
 {
     // Configure QEI module
@@ -70,6 +72,8 @@ void init_QEI(void)
     IFS4bits.QEI2IF = 0;  // clear interrupt flag
     IEC4bits.QEI2IE = 1;  // enable QEI interrupt
     IPC18bits.QEI2IP = 5; // set QEI interrupt priority
+    
+    
 
     U1TXREG = 'I'; // Transmit one character
 }
@@ -78,12 +82,18 @@ void init_QEI(void)
 void __attribute__((interrupt, no_auto_psv)) _QEI1Interrupt(void)
 {
     IFS3bits.QEI1IF = 0;  // clear interrupt flag
-    if (POS1CNT < 0x7fff) //less than half of maxcount 32768
-                          //longpos + 0xFFFF + 1; // overflow condition caused interrupt
-        U1TXREG = 'o';
-    else
-        //longpos - 0xFFFF - 1; // underflow condition caused interrupt
-        U1TXREG = 'u';
+    
+    //less than half of maxcount 32768
+    if (POS1CNT < 0x7fff) {
+      U1TXREG = 'o'; // Just for debugging purposes
+      // Saving count information in long variable in case of over/underflow
+      longpos += 0xFFFF + 1; //overflow condition caused interrupt
+    } else {
+      U1TXREG = 'u'; // Just for debugging purposes
+      // Saving count information in long variable in case of over/underflow
+      longpos -= 0xFFFF + 1; //underflow condition caused interrupt
+    }
+        
 }
 
 // another timer interrupt for accessing the position

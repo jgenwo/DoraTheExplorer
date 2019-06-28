@@ -49,7 +49,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "pwm.h"
-//#include "qei.h"
+#include "qei.h"
 
 #define IN_SIMULATION_MODE 0
 
@@ -78,6 +78,7 @@ int main(void)
     setupADC1();
     startADC1();
     init_PWM();
+    init_QEI();
     //init_QEI();
 
     while (1)

@@ -7,8 +7,11 @@
 
 #ifndef QEI_H
 #define QEI_H
+#include "xc.h"
 
+extern long int longpos; // Declare long position count overflow variable
 #ifdef __cplusplus
+
 extern "C"
 {
 #endif
