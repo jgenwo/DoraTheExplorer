@@ -3,6 +3,7 @@
 #include "gpio.h"
 
 long int longpos = 0; // Initialize long position count overflow variable
+int current_speed = 0; // Initialize variable in which the current speed is stored
 
 void init_QEI(void)
 {
@@ -76,6 +77,18 @@ void init_QEI(void)
     
 
     U1TXREG = 'I'; // Transmit one character
+}
+
+void calculate_speed(int new_count){
+    static int old_count = 0;
+    // calculate current speed. This function is supposed to be called in a
+    // regular timer. The speed is given in: counts/timer_period
+    // where counts is the number of QEI counts since this function was last
+    // called and timer_period is the time between two calls of this function
+    // This could easily be extended to give a time as well to calculate RPM or
+    // something.
+    current_speed = new_count - old_count;
+    old_count = new_count;
 }
 
 // interrupt service routine that resets the position counter for the QEI 1
