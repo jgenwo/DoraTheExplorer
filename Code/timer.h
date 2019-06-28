@@ -10,4 +10,6 @@
 #include "xc.h"
 void initTimer1(unsigned int period);
 void startTimer1(void);
+void initTimer2(unsigned int period);
+void startTimer2(void);
 #endif /* TIMER_H */
