@@ -39,4 +39,5 @@
     Nop(); // 105uS delay
 
 void initUART();
+void send(char msg[]);
 #endif /* GPIO_H */

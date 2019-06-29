@@ -10,11 +10,15 @@
  *  distance 10-60mm in 5mm steps!!! Lower than 10mm gives weird values and collision gives -1
  *  returns -1 for to far
 */
-int distance(int val){
-    int ret;
-        if (val > 3300) {
-            ret = 0;
-        } else {
+int distance(char sensor){
+    int ret, val;
+    if (sensor == 'f')
+        val = adcData[0];
+    else if(sensor == 'r')
+        val = adcData[1];
+    else
+        val = adcData[2];
+    
             if (val > 3000) {
                 ret = 10;
             } else {
@@ -61,7 +65,6 @@ int distance(int val){
                     }
                 }
             }
-        }
     return ret;
 }
 
@@ -78,6 +81,15 @@ int rightWall(){
  *  returns 0 for no wall 1 for wall on the left side
 */
 int leftWall(){
+    if (adcData[2] < 1400 || adcData[2] > 3300)
+        return 0;
+    return 1;
+}
+
+/** 
+ *  returns 0 for no wall 1 for wall on the left side
+*/
+int frontWall(){
     if (adcData[2] < 1400 || adcData[2] > 3300)
         return 0;
     return 1;

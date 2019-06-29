@@ -31,6 +31,20 @@
 #ifndef CONTROL_H
 #define	CONTROL_H
 #include "xc.h"
+
+extern struct PID_Controller
+{
+    float error;
+    float integral;
+    float derivative;
+    float last_error;
+    int pwm;
+    
+    int kp;
+    int ki;
+    int kd;
+};
+
 void motor1_set_speed(float wanted_speed);
 void motor2_set_speed(float wanted_speed);
 void motor1_control(float current_angular_speed);

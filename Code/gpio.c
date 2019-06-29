@@ -14,15 +14,15 @@ void initIO()
     //all pins are inputs by default
 
     //outputs
-    TRISBbits.TRISB8 = 0; //LEDBack output
-    //TRISCbits.TRISC3=0; //LEDFront output
+    TRISCbits.TRISC4 = 0; //LEDBack output / NOT WORKING YET
+    TRISCbits.TRISC3 = 0; //LEDFront output
 
     // ******* Configure two bits as output bits for the first hbridge
-    TRISBbits.TRISB6 = 0; // HBRIDGE1 (Pin 15)
-    TRISBbits.TRISB7 = 0; //HBRIDGE2 (Pin 16)
+    TRISAbits.TRISA7 = 0;
+    TRISBbits.TRISB14 = 0; 
     // ******* Configure two bits as output bits for the second hbridge
-    TRISBbits.TRISB4 = 0; // HBRIDGE3 (Pin 11)
-    TRISAbits.TRISA4 = 0; //HBRIDGE4 (Pin 12)
+    TRISBbits.TRISB9 = 0; 
+    TRISCbits.TRISC6 = 0; 
     // ******* H-Bridge Part over
 
     // set up remappable pins
@@ -31,10 +31,10 @@ void initIO()
     // input pin mappig example below:, here you choose the register with the device and assign an remappable pin
 
     //I now set A1 to RP12, B1 to RP13, A2 to RP2 (pin 6) and B2 to RP10 (pin 21).
-    RPINR14bits.QEA1R = 0xB; // Configure QEI RP11 channel A1 pin 22
+    /**RPINR14bits.QEA1R = 0xB; // Configure QEI RP11 channel A1 pin 22
     RPINR14bits.QEB1R = 0xC; // Configure QEI RP12 channel B1 pin 23
     RPINR16bits.QEA2R = 0x2; // Configure QEI RP2 channel A2 pin 6
-    RPINR16bits.QEB2R = 0xA; // Configure QEI RP10 channel B2 pin 21
+    RPINR16bits.QEB2R = 0xA; // Configure QEI RP10 channel B2 pin 21*/
 
     //RPINR14bits.QEA1R = 8; // QEI1 A to pin RB8
     //RPINR14bits.QEA1R = 11; // QEI1 A to pin RB11
