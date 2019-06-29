@@ -81,8 +81,6 @@ int main(void)
     setupADC1();
     startADC1();
     init_PWM();
-    
-    //init_QEI();
 
     while (1)
     {
