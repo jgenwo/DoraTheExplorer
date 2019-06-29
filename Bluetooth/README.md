@@ -1,7 +1,10 @@
 # Bluetooth interface laptop
 
-java -jar Bluetooth.jar to run in commandline
+## To run:
 
+	java -jar Bluetooth.jar 
+
+## Use:
 1. Select Bluetooth device
 2. Select SERIAL service (if only one exists -> autoselection)
 3. Commands:
