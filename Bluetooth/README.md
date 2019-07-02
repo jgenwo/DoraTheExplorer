@@ -12,4 +12,8 @@
    get periodic UPDATEs with pressing 'P'
    stop periodic UPDATEs with pressing 'Q'
 
+## Requirements
+
+Java 11
+
 
