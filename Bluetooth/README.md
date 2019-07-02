@@ -1,19 +1,15 @@
-# Bluetooth interface laptop
+# Bluetooth laptop interface
 
-## To run:
+## To run double-click:
 
-	java -jar Bluetooth.jar 
+	Bluetooth.jar 
 
 ## Use:
 
 1. Select Bluetooth device
-2. Select SERIAL service (if only one exists -> autoselection)
-3. Commands:
-	- q (quit):	Exits the programm
-	- w (write):	if in write mode enter value, which gets send to device via SERIAL
-	- r (read):	reads one line #TODO more fancy visualization plus easier handling
+2. Select SERIAL service 
+3. get UPDATE with pressing 'U'
+   get periodic UPDATEs with pressing 'P'
+   stop periodic UPDATEs with pressing 'Q'
 
-### Don't use src
-
-currently working on nice window based app, which isn't working completly yet
 

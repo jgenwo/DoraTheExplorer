@@ -89,7 +89,7 @@ public class Bluetooth {
         }
         synchronized (serviceSearchCompletedEvent) {
             System.out.println("search services.. ");
-            LocalDevice.getLocalDevice().getDiscoveryAgent().searchServices(new int[]{0x0100}, new UUID[]{new UUID(0x1105)}, btDevice, listener);
+            LocalDevice.getLocalDevice().getDiscoveryAgent().searchServices(new int[]{0x0100}, new UUID[]{new UUID(0x1101)}, btDevice, listener);
             serviceSearchCompletedEvent.wait();
         }
     }

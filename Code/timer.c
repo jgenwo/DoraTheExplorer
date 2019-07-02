@@ -72,7 +72,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     {
         LED_Back = ~LED_Back;
         LED_Front = ~LED_Front;
-        send("hi there i m a loooong message");
         count = 0;
     }
 }

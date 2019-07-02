@@ -22,7 +22,6 @@ public class BlView extends JPanel {
         super(true);
         this.contr = contr;
         this.bluetooth = bluetooth;
-
         JButton search_button = new JButton("search.. ");
         search_button.addActionListener(e -> {
             try {
@@ -41,9 +40,9 @@ public class BlView extends JPanel {
         deviceList.addActionListener(e -> {
             JComboBox cb = (JComboBox) e.getSource();
             int id = cb.getSelectedIndex();
-            if (id != 0){
+            if (id != 0) {
                 try {
-                    bluetooth.serial_service(id-1);
+                    bluetooth.serial_service(id - 1);
                     Vector<String> services = bluetooth.getServiceFound();
                     serviceList.removeAllItems();
                     serviceList.addItem(" ");
@@ -51,7 +50,8 @@ public class BlView extends JPanel {
                         serviceList.addItem(services.get(i));
                     }
                 } catch (Exception f) {
-                }}
+                }
+            }
         });
 
         String[] inputService = {""};
@@ -60,9 +60,8 @@ public class BlView extends JPanel {
             JComboBox cb = (JComboBox) e.getSource();
             String service = (String) cb.getSelectedItem();
             try {
-                if (!service.equals("")){
+                if (!service.equals("")) {
                     bluetooth.connect(service);
-                    System.setOut(System.out);
                     contr.switchToInfo(new InfoView(contr));
                 }
             } catch (Exception f) {
