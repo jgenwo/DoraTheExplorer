@@ -62,29 +62,64 @@ void send(char msg[]){
         U1TXREG = '\n';
     }    
 }
-    char my_char;
-
 //=================================
 /* UART1 Receive Interrupt Service Routine */
 
+    
+char* inttostring(int value){
+    if(value > 9){
+        if(value > 99){
+            if(value > 999){
+                if(value > 9999){
+                    char msg[5];
+                    sprintf(msg, "%d", value);
+                    return msg;
+                }
+                else{
+                    char msg[4];
+                    sprintf(msg, "%d", value);
+                    return msg;
+                }
+            } else{
+                char msg[3];
+            sprintf(msg, "%d", value);
+            return msg;
+            }
+        }
+        else{
+            char msg[2];
+            sprintf(msg, "%d", value);
+            return msg;
+        }
+    } else {
+        if(value < 0){
+            return strcat("-",inttostring(-1*value));
+        } else{
+            char msg[1];
+            sprintf(msg, "%d", value);
+            return msg;
+        }
+    }
+        
+}
 void __attribute__((__interrupt__)) _U1RXInterrupt(void)
 {
   IFS0bits.U1RXIF = 0;            
-  my_char = U1RXREG;  
-  char msg[50] = "UPDATE{F:";
-  strcat(msg,"5");
+  char my_char = U1RXREG;  
+  char msg[100] = "UPDATE{F:";
+  strcat(msg,inttostring(5));
   strcat(msg,";R:");
-  strcat(msg,"5");
+  strcat(msg,inttostring(50));
   strcat(msg,";L:");
-  strcat(msg,"5");
+  strcat(msg,inttostring(500));
   strcat(msg,";X:");
-  strcat(msg,"4");
+  strcat(msg,inttostring(5000));
   strcat(msg,";Y:");
-  strcat(msg,"1");
+  strcat(msg,inttostring(10000));
   strcat(msg,";ER:");
-  strcat(msg,"4056");
+  strcat(msg,inttostring(5));
   strcat(msg,";EL:");
-  strcat(msg,"3000");
+  strcat(msg,inttostring(5));
   strcat(msg,";}");  
   send(msg);
 }
