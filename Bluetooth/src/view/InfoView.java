@@ -14,7 +14,7 @@ public class InfoView extends JPanel {
     private Controller contr;
     private int N = 8;
     private Rectangle2D[][] rect = new Rectangle2D[N][N];
-    private boolean periodic = false;
+    private boolean periodic = false, all = false;
     private int counter = 0;
 
 
@@ -27,12 +27,20 @@ public class InfoView extends JPanel {
                 final int k = e.getKeyCode();
                 if (k == KeyEvent.VK_U) {
                     periodic = false;
-                    contr.refresh();
+                    if (all)
+                        contr.showRead();
+                    else
+                        contr.refresh();
                 } else if (k == KeyEvent.VK_P) {
                     periodic = true;
                 } else if (k == KeyEvent.VK_Q) {
                     periodic = false;
+                } else if (k == KeyEvent.VK_A) {
+                    all = true;
+                } else if (k == KeyEvent.VK_R) {
+                    all = false;
                 }
+
             }
         });
         for (int i = 0; i < N; i++)
@@ -44,7 +52,10 @@ public class InfoView extends JPanel {
         try {
             if (periodic) {
                 if (counter >= 40) {
-                    contr.refresh();
+                    if (all)
+                        contr.showRead();
+                    else
+                        contr.refresh();
                     counter = 0;
                 } else {
                     counter++;
@@ -74,9 +85,12 @@ public class InfoView extends JPanel {
             g.drawString(encoder_right + " (ENCODER_RIGHT)", 460, 120);
             g.drawString(encoder_left + " (ENCODER_LEFT)", 460, 150);
 
-            g.drawString("Press U for update", 460, 300);
-            g.drawString("Press P for starting periodic update", 460, 340);
-            g.drawString("Press Q for stopping periodic update", 460, 380);
+            g.drawString("Press R for sending request to get update message", 460, 230);
+            g.drawString("Press A for just all other data to output", 460, 260);
+            g.drawString("Press U for update once", 460, 340);
+            g.drawString("Press P for starting periodic update", 460, 370);
+            g.drawString("Press Q for stopping periodic update", 460, 400);
+
             requestFocus();
         } catch (Exception e) {
             e.printStackTrace();

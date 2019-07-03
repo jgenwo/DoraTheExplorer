@@ -76,7 +76,7 @@ void init_QEI(void)
     
     
 
-    U1TXREG = 'I'; // Transmit one character
+    //U1TXREG = 'I'; // Transmit one character
 }
 
 void calculate_speed(void){

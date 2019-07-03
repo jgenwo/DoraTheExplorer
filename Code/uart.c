@@ -6,6 +6,9 @@
  */
 
 #include "uart.h"
+#include "qei.h"
+#include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 
 void initUART()
@@ -66,60 +69,30 @@ void send(char msg[]){
 /* UART1 Receive Interrupt Service Routine */
 
     
-char* inttostring(int value){
-    if(value > 9){
-        if(value > 99){
-            if(value > 999){
-                if(value > 9999){
-                    char msg[5];
-                    sprintf(msg, "%d", value);
-                    return msg;
-                }
-                else{
-                    char msg[4];
-                    sprintf(msg, "%d", value);
-                    return msg;
-                }
-            } else{
-                char msg[3];
-            sprintf(msg, "%d", value);
-            return msg;
-            }
-        }
-        else{
-            char msg[2];
-            sprintf(msg, "%d", value);
-            return msg;
-        }
-    } else {
-        if(value < 0){
-            return strcat("-",inttostring(-1*value));
-        } else{
-            char msg[1];
-            sprintf(msg, "%d", value);
-            return msg;
-        }
-    }
-        
+char* inttostring(int value, char* buffer){
+    sprintf(buffer, "%d", value); 
+    return buffer;
 }
-void __attribute__((__interrupt__)) _U1RXInterrupt(void)
+
+void __attribute__((__interrupt__,auto_psv)) _U1RXInterrupt(void)
 {
   IFS0bits.U1RXIF = 0;            
-  char my_char = U1RXREG;  
-  char msg[100] = "UPDATE{F:";
-  strcat(msg,inttostring(5));
+  //char my_char = U1RXREG;  
+  char msg[60] = "U{F:";
+  char f[4], r[4] ,l[4], x[2], y[2], er[6], el[6];
+  strcat(msg,inttostring(5,f));
   strcat(msg,";R:");
-  strcat(msg,inttostring(50));
+  strcat(msg,inttostring(50,r));
   strcat(msg,";L:");
-  strcat(msg,inttostring(500));
+  strcat(msg,inttostring(30,l));
   strcat(msg,";X:");
-  strcat(msg,inttostring(5000));
+  strcat(msg,inttostring(4,x));
   strcat(msg,";Y:");
-  strcat(msg,inttostring(10000));
+  strcat(msg,inttostring(5,y));
   strcat(msg,";ER:");
-  strcat(msg,inttostring(5));
+  strcat(msg,inttostring(POS1CNT,er));
   strcat(msg,";EL:");
-  strcat(msg,inttostring(5));
+  strcat(msg,inttostring(POS2CNT,el));
   strcat(msg,";}");  
   send(msg);
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.0">
+<eagle version="9.4.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="10" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -73,7 +73,7 @@
 <layer number="99" name="SpiceOrder" color="7" fill="1" visible="no" active="no"/>
 </layers>
 <board>
-<fusionsync huburn="a.cGVyc29uYWw6dWUyYzA3MWJm" projecturn="a.cGVyc29uYWw6dWUyYzA3MWJmIzIwMTkwNTEwMTkzMDE2MTgx" f3durn="urn:adsk.wipprod:dm.lineage:LzfZPdVxSJWymXpfH906Uw" pcbguid="92b48772-7a29-4d61-9a3a-7b43e2ddcb05" lastpulledtime="" lastsyncedchangeguid="8cdfe065-7177-55a4-0700-fb8dd44d196c"/>
+<fusionsync huburn="a.cGVyc29uYWw6dWUyYzA3MWJm" projecturn="a.cGVyc29uYWw6dWUyYzA3MWJmIzIwMTkwNTEwMTkzMDE2MTgx" f3durn="urn:adsk.wipprod:dm.lineage:LzfZPdVxSJWymXpfH906Uw" pcbguid="92b48772-7a29-4d61-9a3a-7b43e2ddcb05" lastpulledtime="" lastsyncedchangeguid="c9fc3dd6-5f53-dd5b-c8bc-e228215e0350"/>
 <plain>
 <wire x1="0" y1="0" x2="85.09" y2="0" width="0" layer="20"/>
 <wire x1="85.09" y1="0" x2="85.09" y2="92.71" width="0" layer="20"/>
@@ -107,8 +107,8 @@
 <wire x1="54.356" y1="25.654" x2="62.992" y2="25.654" width="0.254" layer="25"/>
 <wire x1="62.992" y1="25.654" x2="62.992" y2="3.81" width="0.254" layer="25"/>
 <wire x1="62.992" y1="3.81" x2="54.356" y2="3.81" width="0.254" layer="25"/>
-<text x="66.294" y="49.022" size="1.778" layer="25">*</text>
-<text x="17.78" y="49.022" size="1.778" layer="25">*</text>
+<text x="66.294" y="49.53" size="1.778" layer="25">*</text>
+<text x="17.78" y="49.53" size="1.778" layer="25">*</text>
 <text x="50.546" y="15.24" size="0.8128" layer="25" rot="R90">+5V</text>
 <text x="50.546" y="12.446" size="0.8128" layer="25" rot="R90">GND</text>
 <text x="24.892" y="12.7" size="0.8128" layer="25" rot="R90">GND</text>

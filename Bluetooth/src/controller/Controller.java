@@ -7,7 +7,10 @@ import view.BlView;
 import view.InfoView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Timer;
 
 public class Controller extends JFrame {
@@ -40,8 +43,23 @@ public class Controller extends JFrame {
     public void switchToInfo(InfoView info_view) {
         remove(bluetooth_view);
         this.info_view = info_view;
-        setSize(800, 460);
-        add(info_view);
+        setLayout(new BorderLayout(0, 0));
+        setSize(850, 660);
+
+        JTextArea textArea = new JTextArea(10, 60);
+        textArea.setSize(750, 150);
+        textArea.setBackground(Color.DARK_GRAY);
+        textArea.setForeground(Color.LIGHT_GRAY);
+        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                textArea.append(String.valueOf((char) b));
+                textArea.setCaretPosition(textArea.getDocument().getLength());
+            }
+        }));
+        add(info_view, BorderLayout.CENTER);
+        add(new JScrollPane(textArea), BorderLayout.SOUTH);
     }
 
     public int[] getData() {
@@ -56,26 +74,32 @@ public class Controller extends JFrame {
             data = bluetooth.read();
         } catch (IOException e) {
         }
+        System.out.println(data);
         dat = parseData(data);
-        model.setFront(dat[0]);
-        model.setRight(dat[1]);
-        model.setLeft(dat[2]);
-        model.setX(dat[3]);
-        model.setY(dat[4]);
-        model.setEncoder_right(dat[5]);
-        model.setEncoder_left(dat[6]);
+        if (dat.length == 7) {
+            model.setFront(dat[0]);
+            model.setRight(dat[1]);
+            model.setLeft(dat[2]);
+            model.setX(dat[3]);
+            model.setY(dat[4]);
+            model.setEncoder_right(dat[5]);
+            model.setEncoder_left(dat[6]);
+        }
     }
 
     /**
-     * @param data "UPDATE{F:value;R:value;L:value;X:value;Y:value;ER:value;EL:value;}"
+     * @param data "U{F:value;R:value;L:value;X:value;Y:value;ER:value;EL:value;}"
      * @return
      */
     public int[] parseData(String data) {
         int[] dat = new int[7];
-        if (data.startsWith("UPDATE")) {
+        if (data.startsWith("U{")) {
             data = data.substring(data.indexOf('{') + 1, data.indexOf('}'));
             for (int i = 0; i < dat.length; i++) {
-                dat[i] = Integer.parseInt(data.substring(data.indexOf(':') + 1, data.indexOf(';')));
+                try {
+                    dat[i] = Integer.parseInt(data.substring(data.indexOf(':') + 1, data.indexOf(';')));
+                } catch (NumberFormatException e) {
+                }
                 data = data.substring(data.indexOf(";") + 1);
             }
         }
@@ -85,5 +109,9 @@ public class Controller extends JFrame {
 
     public static void main(String[] args) {
         new Controller();
+    }
+
+    public void showRead() {
+        System.out.println(bluetooth.read());
     }
 }

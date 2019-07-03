@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.0">
+<eagle version="9.4.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="10" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -3975,7 +3975,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="36.8046" y1="56.896" x2="35.56" y2="56.896" width="0.508" layer="1"/>
 <wire x1="35.118" y1="57.338" x2="33.528" y2="57.338" width="0.508" layer="1"/>
 <wire x1="35.56" y1="56.896" x2="35.118" y2="57.338" width="0.508" layer="1"/>
-<polygon width="0.127" layer="1">
+<polygon width="0.127" layer="1" thermals="no">
 <vertex x="37.338" y="57.15"/>
 <vertex x="37.338" y="56.642"/>
 <vertex x="31.496" y="56.642"/>
@@ -4951,9 +4951,6 @@ Covered vias can be set in Masks (Limit).
 <mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
 <mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
 </mfgpreviewcolors>
-<errors>
-<approved hash="23,16,8cf6a8f8ae9d8a93"/>
-</errors>
 </board>
 </drawing>
 <compatibility>

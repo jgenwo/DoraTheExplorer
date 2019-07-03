@@ -13,8 +13,7 @@ public class Bluetooth {
     private final Object inquiryCompletedEvent = new Object();
     private final Object serviceSearchCompletedEvent = new Object();
     private DiscoveryListener listener;
-    private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    private BufferedReader in;
+    private BufferedReader in = null;
     private OutputStream os = null;
     private InputStream is = null;
     private StreamConnection streamConnection = null;
@@ -108,11 +107,12 @@ public class Bluetooth {
 
         os = streamConnection.openOutputStream();
         is = streamConnection.openInputStream();
+
     }
 
     public String read() {
-        in = new BufferedReader(new InputStreamReader(is));
         String read = "";
+        in = new BufferedReader(new InputStreamReader(is));
         try {
             read = in.readLine();
         } catch (IOException e) {
