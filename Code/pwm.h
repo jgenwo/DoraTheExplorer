@@ -33,4 +33,10 @@
 #include "xc.h"
 void init_PWM(void);
 void test_PWM(void);
+void drive_motor_1_forward(int dutycycle);
+void drive_motor_1_backward(int dutycycle);
+void drive_motor_2_forward(int dutycycle);
+void drive_motor_2_backward(int dutycycle);
+void fast_stop_motor1();
+void fast_stop_motor2();
 #endif /* PWM_H */

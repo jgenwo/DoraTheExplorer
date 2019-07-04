@@ -72,17 +72,18 @@ int main(void)
     }
     initUART();
     initIO();
+    init_QEI(); // init QEI before timers cause one of the timer calls needs it
     initTimer1(6250); //6250 gives 10ms timer interrupt, based on a 1.6 us base = 40MIPS with 64 prescaler
+    initTimer2(2600); //2600 gives 4.16ms timer interrupt, based on 40MIPs with 64 prescaler
     startTimer1();
+    startTimer2();
     initDmaChannel4();
     setupADC1();
     startADC1();
     init_PWM();
-    init_QEI();
 
     while (1)
     {
-        //test_PWM();
     };
     return 0;
 }
