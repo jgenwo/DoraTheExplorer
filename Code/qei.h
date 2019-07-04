@@ -11,6 +11,10 @@
 
 extern long int longpos; // Declare long position count overflow variable
 extern int current_speed; // Declare variable in which the current speed is stored
+extern long int longpos2; // Declare long position count overflow variable
+extern int current_speed2; // Declare variable in which the current speed is stored
+extern long int dist; 
+
 #ifdef __cplusplus
 
 extern "C"
@@ -23,4 +27,6 @@ extern "C"
 #endif
 void init_QEI();
 void calculate_speed(void);
+void calculate_speed2(void);
+void calculate_distance();
 #endif /* QEI_H */

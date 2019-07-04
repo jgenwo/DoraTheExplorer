@@ -9,6 +9,8 @@
 #include "gpio.h"
 #include "dma.h"
 #include <stdio.h>
+#include "qei.h"
+#include "control.h"
 
 void init_PWM()
 {
@@ -52,13 +54,7 @@ void init_PWM()
     // PIN 24 is used as PWM output PIN for motor 2
 
     P1TCONbits.PTEN = 1; // Enable the PWM Module
-    P2TCONbits.PTEN = 1;
-
-    HBRIDGE1 = 0; // An output for H-Bridge logic input
-    HBRIDGE2 = 1; // An output for H-Bridge logic input
-
-    HBRIDGE3 = 0; // An output for H-Bridge logic input
-    HBRIDGE4 = 1; // An output for H-Bridge logic input
+    P2TCONbits.PTEN = 1;    
 
     // No deadtime inserted yet, as it seems irrelevant right now
 }
@@ -66,14 +62,14 @@ void init_PWM()
 // The HBRIDGE settings depend on where +/- of the motors is put and which pins
 // go exactly where. The current ones are completely arbitrary as
 // "placeholders" for future values with the board
-void drive_motor_1_forward(int dutycycle)
+void drive_motor_1_backward(int dutycycle)
 {
 	HBRIDGE1 = 1;
 	HBRIDGE2 = 0;
 	P1DC1 = dutycycle;
 }
 
-void drive_motor_1_backward(int dutycycle)
+void drive_motor_1_forward(int dutycycle)
 {
 	HBRIDGE1 = 0;
 	HBRIDGE2 = 1;

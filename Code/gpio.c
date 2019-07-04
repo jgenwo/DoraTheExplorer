@@ -37,11 +37,11 @@ void initIO()
     RPINR16bits.QEB2R = 0xA; // Configure QEI RP10 channel B2 pin 21*/
 
     //RPINR14bits.QEA1R = 8; // QEI1 A to pin RB8
-    //RPINR14bits.QEA1R = 11; // QEI1 A to pin RB11
-    //RPINR14bits.QEB1R = 10; // QEI1 B to pin RB10
+    RPINR14bits.QEA1R = 24; // QEI1 A to pin RB11
+    RPINR14bits.QEB1R = 25; // QEI1 B to pin RB10
 
-    // RPINR16bits.QEA2R = 3; //QEI2 A to pin RB3 (used to be TAST input with switch, resolder )
-    //RPINR16bits.QEB2R = 8;//QEI2 B to pin RB8
+    RPINR16bits.QEA2R = 13; //QEI2 A to pin RB3 (used to be TAST input with switch, resolder )
+    RPINR16bits.QEB2R = 12;//QEI2 B to pin RB8
 
     //RPINR18bits.U1RXR = 1 ; //U1RX register is pin RB1 / RP1
 

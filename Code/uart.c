@@ -69,7 +69,7 @@ void send(char msg[]){
 /* UART1 Receive Interrupt Service Routine */
 
     
-char* inttostring(int value, char* buffer){
+/**char* inttostring(int value, char* buffer){
     sprintf(buffer, "%d", value); 
     return buffer;
 }
@@ -77,8 +77,8 @@ char* inttostring(int value, char* buffer){
 void __attribute__((__interrupt__,auto_psv)) _U1RXInterrupt(void)
 {
   IFS0bits.U1RXIF = 0;            
-  //char my_char = U1RXREG;  
-  char msg[60] = "U{F:";
+  char my_char = U1RXREG;  
+  /**char msg[60] = "U{F:";
   char f[4], r[4] ,l[4], x[2], y[2], er[6], el[6];
   strcat(msg,inttostring(5,f));
   strcat(msg,";R:");
@@ -93,6 +93,5 @@ void __attribute__((__interrupt__,auto_psv)) _U1RXInterrupt(void)
   strcat(msg,inttostring(POS1CNT,er));
   strcat(msg,";EL:");
   strcat(msg,inttostring(POS2CNT,el));
-  strcat(msg,";}");  
-  send(msg);
-}
+  strcat(msg,";}");  */
+

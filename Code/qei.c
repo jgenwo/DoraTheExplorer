@@ -1,9 +1,15 @@
 #include "qei.h"
 #include "xc.h"
 #include "gpio.h"
+#include "uart.h"
+#include "stdio.h"
 
 long int longpos = 0; // Initialize long position count overflow variable
 int current_speed = 0; // Initialize variable in which the current speed is stored
+long int longpos2 = 0; // Initialize long position count overflow variable
+int current_speed2 = 0; // Initialize variable in which the current speed is stored
+
+long int dist = 0;
 
 void init_QEI(void)
 {
@@ -93,11 +99,31 @@ void calculate_speed(void){
     old_count = new_count;
 }
 
+void calculate_distance(){
+    dist = longpos + POS2CNT;
+    char buffer[10];
+    sprintf(buffer, "%ld", dist);
+    send(buffer);
+}
+
+void calculate_speed2(void){
+    static int old_count2 = 0;
+    static int new_count2 = 0;
+    // calculate current speed. This function is supposed to be called in a
+    // regular timer. The speed is given in: counts/timer_period
+    // where counts is the number of QEI counts since this function was last
+    // called and timer_period is the time between two calls of this function
+    // This could easily be extended to give a time as well to calculate RPM or
+    // something.
+    new_count2 = longpos2 + POS2CNT;
+    current_speed2 = new_count2 - old_count2;
+    old_count2 = new_count2;
+}
+
 // interrupt service routine that resets the position counter for the QEI 1
 void __attribute__((interrupt, no_auto_psv)) _QEI1Interrupt(void)
 {
     IFS3bits.QEI1IF = 0;  // clear interrupt flag
-    
     //less than half of maxcount 32768
     if (POS1CNT < 0x7fff) {
       U1TXREG = 'o'; // Just for debugging purposes
@@ -107,6 +133,23 @@ void __attribute__((interrupt, no_auto_psv)) _QEI1Interrupt(void)
       U1TXREG = 'u'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
       longpos -= 0xFFFF + 1; //underflow condition caused interrupt
+    }
+        
+}
+
+// interrupt service routine that resets the position counter for the QEI 2
+void __attribute__((interrupt, no_auto_psv)) _QEI2Interrupt(void)
+{
+    IFS4bits.QEI2IF = 0;  // clear interrupt flag
+    //less than half of maxcount 32768
+    if (POS2CNT < 0x7fff) {
+      U1TXREG = 'o'; // Just for debugging purposes
+      // Saving count information in long variable in case of over/underflow
+      longpos2 += 0xFFFF + 1; //overflow condition caused interrupt
+    } else {
+      U1TXREG = 'u'; // Just for debugging purposes
+      // Saving count information in long variable in case of over/underflow
+      longpos2 -= 0xFFFF + 1; //underflow condition caused interrupt
     }
         
 }

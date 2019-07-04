@@ -11,8 +11,8 @@
 #include "gpio.h"
 
 int kp = 1;
-int ki = 1;
-int kd = 1;
+int ki = 0; // This integral might create initial integrated error overflow
+int kd = 0;
 
 float motor1_wanted_speed = 1;
 float motor2_wanted_speed = 1;
@@ -45,6 +45,8 @@ void motor1_control(float current_angular_speed)
     
     // Integrate the errors over time by summing them up every step
     integral = integral + error;
+    // Comment from Alex - we need to set a positive and a negative integral 
+    // limit and use the struct for each motor
     
     // Take the derivative by substracting the last time step error from 
     // the current error
@@ -73,7 +75,7 @@ void motor1_control(float current_angular_speed)
 }
 
 // Function to be periodically called to actually control motor 2
-void motor21_control(float current_angular_speed)
+void motor2_control(float current_angular_speed)
 {
     
     // initialize needed local variables once
