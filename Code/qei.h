@@ -16,9 +16,8 @@ extern long int new_count;
 
 extern long int longpos2; // Declare long position count overflow variable
 extern int current_speed2; // Declare variable in which the current speed is stored
-extern long int old_count;
-extern long int new_count;
-extern long int dist; 
+extern long int old_count2;
+extern long int new_count2; 
 
 #ifdef __cplusplus
 
@@ -32,5 +31,5 @@ extern "C"
 #endif
 void init_QEI();
 void calculate_speed(char motor);
-void calculate_distance();
+long int calculate_distance();
 #endif /* QEI_H */

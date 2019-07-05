@@ -50,6 +50,7 @@
 #include "dma.h"
 #include "pwm.h"
 #include "qei.h"
+#include "control.h"
 
 #define IN_SIMULATION_MODE 0
 
@@ -82,8 +83,7 @@ int main(void)
     //startADC1();
     init_PWM();
 
-    while (1)
-    {
+    while(1){
     };
     return 0;
 }

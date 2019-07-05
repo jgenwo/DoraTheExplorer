@@ -14,9 +14,6 @@ int current_speed2 = 0; // Initialize variable in which the current speed is sto
 long int old_count2 = 0;
 long int new_count2 = 0;
 
-
-long int dist = 0;
-
 void init_QEI(void)
 {
     // Configure QEI module
@@ -98,6 +95,9 @@ void calculate_speed(char motor){
     // called and timer_period is the time between two calls of this function
     // This could easily be extended to give a time as well to calculate RPM or
     // something.
+    
+    
+    //NOTE by Adrian: longpos is allways 0
     if(motor == 'L'){
         new_count = POS1CNT;
         current_speed = old_count - new_count;
@@ -107,13 +107,6 @@ void calculate_speed(char motor){
         current_speed2 = new_count2 - old_count2;
         old_count2 = new_count2;
     }
-}
-
-void calculate_distance(){
-    dist = longpos + POS2CNT;
-    char buffer[10];
-    sprintf(buffer, "%ld", dist);
-    send(buffer);
 }
 
 // interrupt service routine that resets the position counter for the QEI 1

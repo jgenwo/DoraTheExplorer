@@ -47,6 +47,8 @@ extern struct PID_Controller
 
 void motor_control(char motor, int current_angular_speed);
 void motor_set_speed(char motor, int wanted_speed);
+void go_straight(int speed);
+void stop();
 
 #endif	/* CONTROL_H */
 

@@ -3,6 +3,8 @@
  * Author: Steff
  *
  * Created on 11. Juni 2019, 18:31
+ * Changed by Adrian on 5-7-2019
+ * 
  */
 
 #include "xc.h"
@@ -55,9 +57,6 @@ void init_PWM()
 
     P1TCONbits.PTEN = 1; // Enable the PWM Module
     P2TCONbits.PTEN = 1;    
-    
-   
-
         
     // No deadtime inserted yet, as it seems irrelevant right now
 }
@@ -72,7 +71,6 @@ void drive_motor_forward(char motor, int dutycycle)
         HBRIDGE3 = 0;
         HBRIDGE4 = 1;
         P2DC1 = dutycycle;
-
     }
 }
 

@@ -3,12 +3,14 @@
  * Author: Steff
  *
  * Created on 19. Juni 2019, 16:39
+ * Changed by Adrian on 5-7-2019
  */
 
 
 #include "xc.h"
 #include "pwm.h"
 #include "gpio.h"
+#include "qei.h"
 
 int kp = 1;
 int ki = 1; // This integral might create initial integrated error overflow
@@ -55,16 +57,12 @@ void motor_control(char motor, int current_angular_speed)
         integral = -2000;
     }
     
-    
-    
     // Take the derivative by substracting the last time step error from 
     // the current error
     derivative = error - last_error;
     
     // Calculate desired pwm dutycycle by adding up the different factors
-    pwm = (int)((kp * error) + (ki * integral) + (kd * derivative));
-    pwm = (int)pwm;
-    
+    pwm = (kp * error) + (ki * integral) + (kd * derivative);    
     
     // Catch too low or high pwm values
     if (pwm > 2000) {
@@ -82,3 +80,21 @@ void motor_control(char motor, int current_angular_speed)
         drive_motor_backward(motor, -pwm);
     }
 }
+
+void go_straight(int speed){
+    calculate_speed('L'); // Call function from qei.c to calculate current speed
+    calculate_speed('R'); // Call function from qei.c to calculate current speed2
+
+    motor_set_speed('L',speed); 
+    motor_set_speed('R',speed);
+    motor_control('L',current_speed);
+    motor_control('R',current_speed2);
+}
+
+void stop(){
+    fast_stop_motor('L');
+    fast_stop_motor('R');
+    POS1CNT = 0;
+    POS2CNT = 0;
+}
+
