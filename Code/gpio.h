@@ -14,8 +14,8 @@
 
 //#TODO 
 //******* Define two bits as output bits for the first H-Bridge
-#define HBRIDGE2 LATAbits.LATA7 
-#define HBRIDGE1 LATBbits.LATB14 
+#define HBRIDGE1 LATAbits.LATA7 
+#define HBRIDGE2 LATBbits.LATB14 
 
 //******* Define two bits as output bits for the second H-Bridge
 #define HBRIDGE3 LATBbits.LATB9 

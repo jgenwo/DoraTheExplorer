@@ -55,47 +55,45 @@ void init_PWM()
 
     P1TCONbits.PTEN = 1; // Enable the PWM Module
     P2TCONbits.PTEN = 1;    
+    
+   
 
+        
     // No deadtime inserted yet, as it seems irrelevant right now
 }
 
-// The HBRIDGE settings depend on where +/- of the motors is put and which pins
-// go exactly where. The current ones are completely arbitrary as
-// "placeholders" for future values with the board
-void drive_motor_1_backward(int dutycycle)
+void drive_motor_forward(char motor, int dutycycle)
 {
-	HBRIDGE1 = 1;
-	HBRIDGE2 = 0;
-	P1DC1 = dutycycle;
+    if (motor == 'L'){
+        HBRIDGE1 = 0;
+        HBRIDGE2 = 1;
+        P1DC1 = dutycycle;
+    } else if (motor == 'R'){
+        HBRIDGE3 = 0;
+        HBRIDGE4 = 1;
+        P2DC1 = dutycycle;
+
+    }
 }
 
-void drive_motor_1_forward(int dutycycle)
+void drive_motor_backward(char motor, int dutycycle)
 {
-	HBRIDGE1 = 0;
-	HBRIDGE2 = 1;
-	P1DC1 = dutycycle;
+    if (motor == 'L'){
+        HBRIDGE1 = 1;
+        HBRIDGE2 = 0;
+        P1DC1 = dutycycle;
+    } else if (motor == 'R'){
+        HBRIDGE3 = 1;
+        HBRIDGE4 = 0;
+        P2DC1 = dutycycle;
+    }
 }
 
-void drive_motor_2_forward(int dutycycle)
+void fast_stop_motor(char motor)
 {
-	HBRIDGE3 = 1;
-	HBRIDGE4 = 0;
-	P1DC2 = dutycycle;
-}
-
-void drive_motor_2_backward(int dutycycle)
-{
-	HBRIDGE3 = 0;
-	HBRIDGE4 = 1;
-	P1DC2 = dutycycle;
-}
-
-void fast_stop_motor1()
-{
-	HBRIDGE1 = HBRIDGE2;
-}
-
-void fast_stop_motor2()
-{
-	HBRIDGE3 = HBRIDGE4;
+    if (motor == 'L'){
+        HBRIDGE1 = HBRIDGE2;
+    } else if (motor == 'R'){
+        HBRIDGE3 = HBRIDGE4;
+    }
 }

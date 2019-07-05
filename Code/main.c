@@ -77,9 +77,9 @@ int main(void)
     initTimer2(2600); //2600 gives 4.16ms timer interrupt, based on 40MIPs with 64 prescaler
     startTimer1();
     startTimer2();
-    initDmaChannel4();
-    setupADC1();
-    startADC1();
+    //initDmaChannel4();
+    //setupADC1();
+    //startADC1();
     init_PWM();
 
     while (1)

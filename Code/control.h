@@ -34,10 +34,10 @@
 
 extern struct PID_Controller
 {
-    float error;
-    float integral;
-    float derivative;
-    float last_error;
+    int error;
+    int integral;
+    int derivative;
+    int last_error;
     int pwm;
     
     int kp;
@@ -45,9 +45,8 @@ extern struct PID_Controller
     int kd;
 };
 
-void motor1_set_speed(float wanted_speed);
-void motor2_set_speed(float wanted_speed);
-void motor1_control(float current_angular_speed);
-void motor2_control(float current_angular_speed);
+void motor_control(char motor, int current_angular_speed);
+void motor_set_speed(char motor, int wanted_speed);
+
 #endif	/* CONTROL_H */
 

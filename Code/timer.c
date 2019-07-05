@@ -73,7 +73,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     {
         LED_Back = ~LED_Back;
         LED_Front = ~LED_Front;
-        calculate_distance();
+        //calculate_distance();
         count = 0;
     }
 }
@@ -84,10 +84,12 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
 {
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
 
-    calculate_speed(); // Call function from qei.c to calculate current speed
-    calculate_speed2(); // Call function from qei.c to calculate current speed2
-    motor1_set_speed(-5); //Motors different direction
-    motor2_set_speed(5);
-    motor1_control(current_speed);
-    motor2_control(current_speed2);
+    calculate_speed('L'); // Call function from qei.c to calculate current speed
+    calculate_speed('R'); // Call function from qei.c to calculate current speed2
+
+    int speed = 10;
+    motor_set_speed('L',speed); 
+    motor_set_speed('R',speed);
+    motor_control('L',current_speed);
+    motor_control('R',current_speed2);
 }
