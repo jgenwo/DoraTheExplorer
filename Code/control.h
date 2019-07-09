@@ -32,18 +32,25 @@
 #define	CONTROL_H
 #include "xc.h"
 
-extern struct PID_Controller
+typedef struct
 {
+    int kp;
+    int ki;
+    int kd;
+    
     int error;
     int integral;
     int derivative;
     int last_error;
-    int pwm;
+    int value;
     
-    int kp;
-    int ki;
-    int kd;
-};
+    int top_lim;
+    int bot_lim;
+    
+    int target;
+} PID_Controller;
+
+extern PID_Controller controller_array[4];
 
 void motor_control(char motor, int current_angular_speed);
 void motor_set_speed(char motor, int wanted_speed);

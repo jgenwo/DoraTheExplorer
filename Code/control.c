@@ -11,6 +11,7 @@
 #include "pwm.h"
 #include "gpio.h"
 #include "qei.h"
+#include "control.h"
 
 int kp = 1;
 int ki = 1; // This integral might create initial integrated error overflow
@@ -85,7 +86,7 @@ void go_straight(int speed){
     calculate_speed('L'); // Call function from qei.c to calculate current speed
     calculate_speed('R'); // Call function from qei.c to calculate current speed2
 
-    motor_set_speed('L',speed); 
+    motor_set_speed('L',speed);
     motor_set_speed('R',speed);
     motor_control('L',current_speed);
     motor_control('R',current_speed2);
@@ -96,5 +97,49 @@ void stop(){
     fast_stop_motor('R');
     POS1CNT = 0;
     POS2CNT = 0;
+}
+
+/*Here is another try to a more general and generic version of the PID that
+ will probably work nicer in the controller cascade*/
+
+PID_Controller f;
+
+void evaluate_controler(PID_Controller *controller, int *current_control_value) {
+    
+    (*controller).error = *current_control_value - (*controller).target;
+    
+    (*controller).integral = (*controller).integral + (*controller).error;
+    
+    (*controller).derivative = (*controller).error - (*controller).last_error;
+    
+    (*controller).last_error = (*controller).error;
+    
+    (*controller).value = (int)((*controller).kp * (*controller).error) + 
+            ((*controller).ki * (*controller).integral) + 
+            ((*controller).kd * (*controller).derivative);
+    
+    if ((*controller).value > (*controller).top_lim) {
+        (*controller).value = (*controller).top_lim;
+    } else if ((*controller).value < (*controller).bot_lim) {
+        (*controller).value = (*controller).bot_lim;
+    }
+ 
+}
+
+void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
+                            int top_lim, int bot_lim, int target) {
+    (*controller).kp = kp;
+    (*controller).ki = ki;
+    (*controller).kd = kd;
+    
+    (*controller).top_lim = top_lim;
+    (*controller).bot_lim = bot_lim;
+    (*controller).target = target;
+    
+    (*controller).error = 0;
+    (*controller).integral = 0;
+    (*controller).derivative = 0;
+    (*controller).last_error = 0;
+    (*controller).value = 0;
 }
 
