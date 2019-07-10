@@ -50,12 +50,19 @@ typedef struct
     int target;
 } PID_Controller;
 
-extern PID_Controller controller_array[4];
+//extern PID_Controller controller_array[4];
+extern PID_Controller pos_control_left;
+extern PID_Controller pos_control_right;
+extern PID_Controller vel_control_left;
+extern PID_Controller vel_control_right;
 
 void motor_control(char motor, int current_angular_speed);
 void motor_set_speed(char motor, int wanted_speed);
 void go_straight(int speed);
 void stop();
+void evaluate_controler(PID_Controller *controller, int current_control_value);
+void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
+                            int top_lim, int bot_lim, int target);
 
 #endif	/* CONTROL_H */
 

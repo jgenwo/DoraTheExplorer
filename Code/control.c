@@ -20,6 +20,15 @@ int kd = 1;
 int motor1_wanted_speed = 1;
 int motor2_wanted_speed = 1;
 
+PID_Controller pos_control_left = {.kp = 1, .ki = 1, .kd = 0,
+                                    .top_lim = 100, .bot_lim = -100};
+PID_Controller pos_control_right = {.kp = 1, .ki = 1, .kd = 0,
+                                    .top_lim = 100, .bot_lim = -100};
+PID_Controller vel_control_left = {.kp = 1, .ki = 1, .kd = 0,
+                                    .top_lim = 2600, .bot_lim = -2600};
+PID_Controller vel_control_right = {.kp = 1, .ki = 1, .kd = 0,
+                                    .top_lim = 2600, .bot_lim = -2600};
+
 // Function to set the target speed of motor 
 void motor_set_speed(char motor, int wanted_speed)
 {
@@ -104,9 +113,9 @@ void stop(){
 
 PID_Controller f;
 
-void evaluate_controler(PID_Controller *controller, int *current_control_value) {
+void evaluate_controler(PID_Controller *controller, int current_control_value) {
     
-    (*controller).error = *current_control_value - (*controller).target;
+    (*controller).error = current_control_value - (*controller).target;
     
     (*controller).integral = (*controller).integral + (*controller).error;
     

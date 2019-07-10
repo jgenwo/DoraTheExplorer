@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include "qei.h"
 #include "control.h"
+#include "pwm.h"
 
 void init_PWM()
 {
@@ -59,6 +60,17 @@ void init_PWM()
     P2TCONbits.PTEN = 1;    
         
     // No deadtime inserted yet, as it seems irrelevant right now
+}
+
+void drive_motor(char motor, int dutycycle)
+{
+    if (dutycycle > 0) {
+        drive_motor_forward(motor, dutycycle);
+    } else if (dutycycle < 0) {
+        drive_motor_backward(motor, -dutycycle);
+    } else {
+        fast_stop_motor(motor);
+    }
 }
 
 void drive_motor_forward(char motor, int dutycycle)
