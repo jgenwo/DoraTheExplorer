@@ -166,6 +166,4 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
         else if(forward == 0)
             go_straight(-speed);
     }
-    
-    
 }
