@@ -41,4 +41,5 @@
 extern int run;
 void initUART();
 void send(char msg[]);
+void sendNameValue(char name[], int value);
 #endif /* GPIO_H */

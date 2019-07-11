@@ -30,7 +30,7 @@ void initUART()
     U1STAbits.URXISEL = 0; // Interrupt after one RX character is received;
     IFS0bits.U1RXIF = 0;
     IEC0bits.U1RXIE = 1;
-    IPC2bits.U1RXIP = 7;
+    IPC2bits.U1RXIP = 4;
     
     IEC0bits.U1TXIE = 1;   // Enable UART TX interrupt
     U1MODEbits.UARTEN = 1; // Enable UART
@@ -64,6 +64,33 @@ void send(char msg[]){
         }
     }
 }
+
+void sendNameValue(char name[], int value){
+    int i = 0, n = strlen(name);
+    while(i < n){
+        if(!U1STAbits.UTXBF){
+            U1TXREG = name[i];
+            i++;
+        }
+    }
+    while(U1STAbits.UTXBF)
+        ;
+    U1TXREG = ' ';
+    char buffer[10];
+    sprintf(buffer, "%d", value);
+    i = 0, n = strlen(buffer);
+    while(i < n){
+        if(!U1STAbits.UTXBF){
+            U1TXREG = buffer[i];
+            i++;
+        }
+    }
+    while(U1STAbits.UTXBF)
+        ;
+    U1TXREG = '\n';
+}
+
+
 //=================================
 /* UART1 Receive Interrupt Service Routine */
 
