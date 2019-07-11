@@ -1,14 +1,23 @@
+/* 
+ * File:   qei.c
+ * Author: Gyri
+ *
+ * Created on June 11, 2019, 1:22 PM
+ */
+
 #include "qei.h"
 #include "xc.h"
 #include "gpio.h"
 #include "uart.h"
 #include "stdio.h"
 
-long int longpos = 0; // Initialize long position count overflow variable
-int current_speed = 0; // Initialize variable in which the current speed is stored
-long int old_count = 0;
-long int new_count = 0;
+//Motor no. 1 is the LEFT motor
+long int longpos1 = 0; // Initialize long position count overflow variable
+int current_speed1 = 0; // Initialize variable in which the current speed is stored
+long int old_count1 = 0;
+long int new_count1 = 0;
 
+//Motor no. 2 is the RIGHT motor
 long int longpos2 = 0; // Initialize long position count overflow variable
 int current_speed2 = 0; // Initialize variable in which the current speed is stored
 long int old_count2 = 0;
@@ -96,12 +105,14 @@ void calculate_speed(char motor){
     // This could easily be extended to give a time as well to calculate RPM or
     // something.
     
+    long right_pos;
+    GET_ENCODER_1(right_pos);
     
-    //NOTE by Adrian: longpos is allways 0
+    //NOTE by Adrian: longpos is always 0
     if(motor == 'L'){
-        new_count = POS1CNT;
-        current_speed = old_count - new_count;
-        old_count = new_count;      
+        new_count1 = POS1CNT;
+        current_speed1 = old_count1 - new_count1;
+        old_count1 = new_count1;      
     } else if (motor == 'R'){
         new_count2 = POS2CNT;
         current_speed2 = new_count2 - old_count2;
@@ -117,11 +128,11 @@ void __attribute__((interrupt, no_auto_psv)) _QEI1Interrupt(void)
     if (POS1CNT < 0x7fff) {
       U1TXREG = 'o'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
-      longpos += 0xFFFF + 1; //overflow condition caused interrupt
+      longpos1 += 0x10000; //overflow condition caused interrupt
     } else {
       U1TXREG = 'u'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
-      longpos -= 0xFFFF + 1; //underflow condition caused interrupt
+      longpos1-= 0x10000; //underflow condition caused interrupt
     }
         
 }
@@ -134,11 +145,11 @@ void __attribute__((interrupt, no_auto_psv)) _QEI2Interrupt(void)
     if (POS2CNT < 0x7fff) {
       U1TXREG = 'O'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
-      longpos2 += 0xFFFF + 1; //overflow condition caused interrupt
+      longpos2 += 0x10000; //overflow condition caused interrupt
     } else {
       U1TXREG = 'U'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
-      longpos2 -= 0xFFFF + 1; //underflow condition caused interrupt
+      longpos2 -= 0x10000; //underflow condition caused interrupt
     }
         
 }
