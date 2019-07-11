@@ -23,6 +23,14 @@ int current_speed2 = 0; // Initialize variable in which the current speed is sto
 long int old_count2 = 0;
 long int new_count2 = 0;
 
+long int current_pos1 = 0;
+long int current_pos2 = 0;
+
+//distance in 10 micrometer 
+// 1cm is 1000 of this (gyrimeters)
+long int distance1 = 0;
+long int distance2 = 0;
+
 void init_QEI(void)
 {
     // Configure QEI module
@@ -105,17 +113,25 @@ void calculate_speed(char motor){
     // This could easily be extended to give a time as well to calculate RPM or
     // something.
     
-    
-    //NOTE by Adrian: longpos is always 0
     if(motor == 'L'){
-        GET_ENCODER_1(new_count1);
+        GET_ENCODER_VALUE_1(new_count1);
         current_speed1 = old_count1 - new_count1;
         old_count1 = new_count1;      
     } else if (motor == 'R'){
-        GET_ENCODER_2(new_count2);
+        GET_ENCODER_VALUE_2(new_count2);
         current_speed2 = new_count2 - old_count2;
         old_count2 = new_count2;
     }
+}
+
+void calculate_position(char motor){
+    if(motor == 'L'){
+        GET_ENCODER_VALUE_1(current_pos1);
+        distance1 = current_pos1 * DISTANCE_PER_CNT;
+    } else if(motor == 'R'){
+        GET_ENCODER_VALUE_2(current_pos2);
+        distance2 = current_pos2 * DISTANCE_PER_CNT;
+        }
 }
 
 // interrupt service routine that resets the position counter for the QEI 1
