@@ -12,6 +12,8 @@
 #include "gpio.h"
 #include "qei.h"
 #include "control.h"
+#include "uart.h"
+#include "stdio.h"
 
 int kp = 1;
 int ki = 1; // This integral might create initial integrated error overflow
@@ -20,13 +22,13 @@ int kd = 1;
 int motor1_wanted_speed = 1;
 int motor2_wanted_speed = 1;
 
-PID_Controller pos_control_left = {.kp = 1, .ki = 1, .kd = 0,
-                                    .top_lim = 100, .bot_lim = -100};
-PID_Controller pos_control_right = {.kp = 1, .ki = 1, .kd = 0,
-                                    .top_lim = 100, .bot_lim = -100};
-PID_Controller vel_control_left = {.kp = 1, .ki = 1, .kd = 0,
+PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
+                                    .top_lim = 30, .bot_lim = -30};
+PID_Controller pos_control_right = {.kp = 1, .ki = 0, .kd = 0,
+                                    .top_lim = 30, .bot_lim = -30};
+PID_Controller vel_control_left = {.kp =50, .ki = 0, .kd = 1,
                                     .top_lim = 2600, .bot_lim = -2600};
-PID_Controller vel_control_right = {.kp = 1, .ki = 1, .kd = 0,
+PID_Controller vel_control_right = {.kp = 50, .ki = 0, .kd = 1,
                                     .top_lim = 2600, .bot_lim = -2600};
 
 // Function to set the target speed of motor 
@@ -91,14 +93,23 @@ void motor_control(char motor, int current_angular_speed)
     }
 }
 
-void go_straight(int speed){
-    calculate_speed('L'); // Call function from qei.c to calculate current speed
-    calculate_speed('R'); // Call function from qei.c to calculate current speed2
+void go_straight2(int speed){
+    
 
     motor_set_speed('L',speed);
     motor_set_speed('R',speed);
-    motor_control('L',current_speed);
+    motor_control('L',current_speed1);
     motor_control('R',current_speed2);
+}
+
+void go_straight(int speed) {
+    vel_control_left.target = (long)speed;
+    vel_control_right.target = (long)speed;
+    evaluate_controller(&vel_control_left, current_speed1);
+    evaluate_controller(&vel_control_right, current_speed2);
+    //sendNameValue("val", vel_control_left.value);
+    drive_motor('L', vel_control_left.value);
+    drive_motor('R', vel_control_right.value);
 }
 
 void stop(){
@@ -106,6 +117,8 @@ void stop(){
     fast_stop_motor('R');
     POS1CNT = 0;
     POS2CNT = 0;
+    longpos1 = 0;
+    longpos2 = 0;
 }
 
 /*Here is another try to a more general and generic version of the PID that
@@ -113,9 +126,9 @@ void stop(){
 
 PID_Controller f;
 
-void evaluate_controler(PID_Controller *controller, int current_control_value) {
+void evaluate_controller(PID_Controller *controller, long int current_control_value) {
     
-    (*controller).error = current_control_value - (*controller).target;
+    (*controller).error = (*controller).target - current_control_value ;
     
     (*controller).integral = (*controller).integral + (*controller).error;
     
@@ -150,5 +163,26 @@ void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
     (*controller).derivative = 0;
     (*controller).last_error = 0;
     (*controller).value = 0;
+}
+
+void turn_right(){
+    
+    pos_control_left.target = 932;
+    pos_control_right.target = -932;
+    
+    evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
+    evaluate_controller(&pos_control_right, (long)(longpos2 + POS2CNT));
+    
+    //sendNameValue("pos2", POS2CNT);
+    //sendNameValue("ctrl", pos_control_left.value);
+    
+    vel_control_left.target = pos_control_left.value;
+    vel_control_right.target = pos_control_right.value;
+    
+    evaluate_controller(&vel_control_left, (long)current_speed1);
+    evaluate_controller(&vel_control_right, (long)current_speed2);
+    
+    drive_motor('L', vel_control_left.value);
+    drive_motor('R', vel_control_right.value);
 }
 

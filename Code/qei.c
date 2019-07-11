@@ -62,7 +62,7 @@ void init_QEI(void)
     QEI2CONbits.QEIM = 0b111;
 
     //SWPAB: Phase A and Phase B Input Swap Select bit
-    QEI1CONbits.SWPAB = 0; // Do not swap the polarity of phase comparison
+    QEI1CONbits.SWPAB = 1; // Do not swap the polarity of phase comparison
     QEI2CONbits.SWPAB = 0;
 
     //PCDOUT: Position Counter Direction State Output Enable bit
@@ -119,7 +119,7 @@ void calculate_speed(char motor){
         old_count1 = new_count1;      
     } else if (motor == 'R'){
         GET_ENCODER_VALUE_2(new_count2);
-        current_speed2 = old_count2 - new_count2;
+        current_speed2 = new_count2 - old_count2;
         old_count2 = new_count2;
     }
 }

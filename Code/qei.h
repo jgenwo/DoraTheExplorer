@@ -51,6 +51,6 @@ extern "C"
 #endif
 void init_QEI();
 void calculate_speed(char motor);
-void calculate_pos(char motor);
+void calculate_position(char motor);
 long int calculate_distance();
 #endif /* QEI_H */

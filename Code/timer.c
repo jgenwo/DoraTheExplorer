@@ -8,6 +8,8 @@
 #include "stdio.h"
 #include "qei.h"
 #include "control.h"
+#include "pwm.h"
+#include "stdio.h"
 
 
 void initTimer1(unsigned int period)
@@ -47,7 +49,7 @@ void initTimer2(unsigned int period)
     
     PR2 = period - 1;  // set Timer 2 period register ()
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
-    IPC1bits.T2IP = 5; // set Timer2 interrupt priority level to 5
+    IPC1bits.T2IP = 7; // set Timer2 interrupt priority level to 5
     IEC0bits.T2IE = 1; // enable Timer 2 interrupt
     T2CONbits.TON = 0; // leave timer disabled initially
 }
@@ -85,6 +87,8 @@ int forward = -1;
 void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
 {
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
+    calculate_speed('L'); // Call function from qei.c to calculate current speed
+    calculate_speed('R'); // Call function from qei.c to calculate current speed2
         
     if(run == 119){
         go_straight(speed);
@@ -93,7 +97,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
         go_straight(-speed);
         forward = 0;
     } else if(run == 100)
-        ;//turn_right();
+        turn_right();
     else if(run == 97)
         ;//turn_left();
     else if(run == 113){
