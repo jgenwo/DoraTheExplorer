@@ -82,8 +82,11 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
 void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
 {
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
+        
+    //115 equals "s"
+    if(run == 115)
+        go_straight(20);
+    else 
+        stop();
     
-    //Negative value for backward / Positive value for forward
-    go_straight(-20);
-
 }

@@ -38,6 +38,7 @@
     asm volatile("REPEAT, #4201"); \
     Nop(); // 105uS delay
 
+extern int run;
 void initUART();
 void send(char msg[]);
 #endif /* GPIO_H */
