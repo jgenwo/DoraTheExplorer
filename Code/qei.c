@@ -115,11 +115,11 @@ void calculate_speed(char motor){
     
     if(motor == 'L'){
         GET_ENCODER_VALUE_1(new_count1);
-        current_speed1 = old_count1 - new_count1;
+        current_speed1 = new_count1 - old_count1;
         old_count1 = new_count1;      
     } else if (motor == 'R'){
         GET_ENCODER_VALUE_2(new_count2);
-        current_speed2 = new_count2 - old_count2;
+        current_speed2 = old_count2 - new_count2;
         old_count2 = new_count2;
     }
 }

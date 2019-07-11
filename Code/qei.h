@@ -27,10 +27,11 @@ extern long int distance1;
 extern long int distance2;
 
 #define MAX_COUNT_PER_WHEEL_REV 2112 //16*4*33 
-#define WHEEL_CIRCONFERENCE 18900 //60mm * pi
+//PULSES_PER_REV x COUNT_INC_PER_REV x MOTOR_REV_PER_WHEEL_REV = 16 x 4 x 33
+#define WHEEL_CIRCONFERENCE 18900 //60mm * pi in 10micrometer
 #define DISTANCE_PER_CNT 9
 
-//PULSES_PER_REV x COUNT_INC_PER_REV x MOTOR_REV_PER_WHEEL_REV = 16 x 4 x 33
+
 
 //Left motor
 #define GET_ENCODER_VALUE_1(POSITION_1) (POSITION_1 = longpos1 + POS1CNT)
@@ -50,5 +51,6 @@ extern "C"
 #endif
 void init_QEI();
 void calculate_speed(char motor);
+void calculate_pos(char motor);
 long int calculate_distance();
 #endif /* QEI_H */
