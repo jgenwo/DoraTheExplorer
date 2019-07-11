@@ -105,16 +105,14 @@ void calculate_speed(char motor){
     // This could easily be extended to give a time as well to calculate RPM or
     // something.
     
-    long right_pos;
-    GET_ENCODER_1(right_pos);
     
     //NOTE by Adrian: longpos is always 0
     if(motor == 'L'){
-        new_count1 = POS1CNT;
+        GET_ENCODER_1(new_count1);
         current_speed1 = old_count1 - new_count1;
         old_count1 = new_count1;      
     } else if (motor == 'R'){
-        new_count2 = POS2CNT;
+        GET_ENCODER_2(new_count2);
         current_speed2 = new_count2 - old_count2;
         old_count2 = new_count2;
     }
