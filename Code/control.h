@@ -47,7 +47,7 @@ typedef struct
     int top_lim;
     int bot_lim;
     
-    int target;
+    long int target;
 } PID_Controller;
 
 //extern PID_Controller controller_array[4];
@@ -60,9 +60,10 @@ void motor_control(char motor, int current_angular_speed);
 void motor_set_speed(char motor, int wanted_speed);
 void go_straight(int speed);
 void stop();
-void evaluate_controler(PID_Controller *controller, int current_control_value);
+void evaluate_controller(PID_Controller *controller, long int current_control_value);
 void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
                             int top_lim, int bot_lim, int target);
+void turn_right();
 
 #endif	/* CONTROL_H */
 
