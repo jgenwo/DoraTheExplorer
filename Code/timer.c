@@ -86,7 +86,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
 {
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
         
-    if(run == 119){
+    /**if(run == 119){
         go_straight(speed);
         forward = 1;
     } else if(run == 115){
@@ -165,5 +165,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
             go_straight(speed);
         else if(forward == 0)
             go_straight(-speed);
-    }
+    }*/
+    sendNameValue("test", 5);
 }

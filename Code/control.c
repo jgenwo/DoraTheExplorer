@@ -97,7 +97,7 @@ void go_straight(int speed){
 
     motor_set_speed('L',speed);
     motor_set_speed('R',speed);
-    motor_control('L',current_speed);
+    motor_control('L',current_speed1);
     motor_control('R',current_speed2);
 }
 
