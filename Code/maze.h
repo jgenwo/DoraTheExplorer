@@ -2,6 +2,8 @@
 #define Maze
 
 #include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 
 #define VISITED(node)	(node & 0b0000100000000000)
 #define NORTH_Wall(node)(node & 0b0001000000000000)
@@ -23,12 +25,18 @@
 #define SET_LAST_X(last, value) (last = (last & 0x00FF) | (value << 8))
 #define SET_LAST_Y(last, value) (last = (last & 0xFF00) | value)
 
+void driveSP();
+void shortestPath(int X, int Y, int distance);
 void explore();
 void printmaze();
 int neighborNorthUnvisited(int X, int Y);
 int neighborEastUnvisited(int X, int Y);
 int neighborSouthUnvisited(int X, int Y);
 int neighborWestUnvisited(int X, int Y);
+void updateDistanceNorth(int X, int Y);
+void updateDistanceEast(int X, int Y);
+void updateDistanceSouth(int X, int Y);
+void updateDistanceWest(int X, int Y);
 void setWalls(int X, int Y, char dir, int right, int left, int front);
 int getRight();
 int getLeft();

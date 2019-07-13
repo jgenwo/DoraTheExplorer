@@ -1,5 +1,13 @@
 #include "maze.h"
 
+
+// HOW TO USE:
+// 
+// 1. explore();
+// 2. shortestPath(X, Y, DISTANCE(last[X][Y]));
+// 3. driveSP();
+
+
 // 2D array to store data for each cell
 // Important!!! JUST access data via the DEFINEd commands
 //
@@ -39,7 +47,145 @@ int last[6][6] = {
 			{-1,-1,-1,-1,-1,-1}
 			};
 
-//TODO find and follow the shortest path!!!!!!!!!
+char *path;	
+
+
+// executes the path computed in shortestPath
+
+void driveSP(){
+	int i, n = strlen(path);
+	for(i = n-1 ; i >= 0 ; i--){
+		char command = path[i];
+		if(command == 'f')
+			; //TODO go 1 cell forward
+		else if(command == 'r')
+			; //TODO go right and 1 cell forward
+		else if(command == 'l')
+			; //TODO go left and 1 cell forward
+		else if(command == 'b')
+			; //TODO go 1 cell backsward
+	}
+}
+
+// computes the path from (0,0) to (X,Y) 
+// distance is the shortest distance between those 2 nodes (DISTANCE(last[X][Y]))
+// actually computes the way back from (X,Y) to (0,0) and is reversed by driveSP()
+
+void shortestPath(int X, int Y, int distance){
+	
+	path = (char*) malloc(distance*sizeof(char));
+	
+	char direction, next;
+	int i;
+	int x = X, y = Y;
+	int last_x = LAST_X(last[x][y]), last_y = LAST_Y(last[x][y]);
+	
+	// direction of arrival at the goal
+	if(x-last_x > 0){
+		direction = 'E';
+	} else if (x-last_x < 0){
+		direction = 'W';
+	} else if(y-last_y > 0){
+		direction = 'N';
+	} else if(y-last_y < 0){
+		direction = 'S';
+	}
+	
+	// compare last and current to compute the command to go from last to current
+	// adjust direction for each step!!!
+	
+	for(i = distance; i > 1 ; i--){
+	
+		x = last_x;
+		y = last_y;
+		last_x = LAST_X(last[x][y]);
+		last_y = LAST_Y(last[x][y]);
+		
+		if(x-last_x > 0){
+			if(direction == 'N')
+				next = 'l';
+			else if(direction == 'E')
+				next = 'f';
+			else if(direction == 'S')
+				next = 'r';
+			else if(direction == 'W')
+				next = 'b';
+			direction = 'E';
+		} else if (x-last_x < 0){
+			if(direction == 'N')
+				next = 'r';
+			else if(direction == 'E')
+				next = 'b';
+			else if(direction == 'S')
+				next = 'l';
+			else if(direction == 'W')
+				next = 'f';
+			direction = 'W';
+		} else if(y-last_y > 0){
+			if(direction == 'N')
+				next = 'f';
+			else if(direction == 'E')
+				next = 'r';
+			else if(direction == 'S')
+				next = 'b';
+			else if(direction == 'W')
+				next = 'l';
+			direction = 'N';
+		} else if(y-last_y < 0){
+			if(direction == 'N')
+				next = 'b';
+			else if(direction == 'E')
+				next = 'l';
+			else if(direction == 'S')
+				next = 'f';
+			else if(direction == 'W')
+				next = 'r';
+			direction = 'S';
+		}
+		path[distance-i] = next;
+	}
+	
+	// compare (0,0) and current to compute the command to go from (0,0) to current
+	// direction has to be 'N' as we start in north direction
+	
+	if(x-last_x > 0){
+		if(direction == 'N')
+			path[distance-1] = 'f';
+		else if(direction == 'E')
+			path[distance-1] = 'r';
+		else if(direction == 'S')
+			path[distance-1] = 'b';
+		else if(direction == 'W')
+			path[distance-1] = 'l';
+	} else if (x-last_x < 0){
+		if(direction == 'N')
+			path[distance-1] = 'f';
+		else if(direction == 'E')
+			path[distance-1] = 'r';
+		else if(direction == 'S')
+			path[distance-1] = 'b';
+		else if(direction == 'W')
+			path[distance-1] = 'l';
+	} else if(y-last_y > 0){
+		if(direction == 'N')
+			path[distance-1] = 'f';
+		else if(direction == 'E')
+			path[distance-1] = 'r';
+		else if(direction == 'S')
+			path[distance-1] = 'b';
+		else if(direction == 'W')
+			path[distance-1] = 'l';
+	} else if(y-last_y < 0){
+		if(direction == 'N')
+			path[distance-1] = 'b';
+		else if(direction == 'E')
+			path[distance-1] = 'l';
+		else if(direction == 'S')
+			path[distance-1] = 'f';
+		else if(direction == 'W')
+			path[distance-1] = 'r';
+	}		
+}
 			
 // explores the maze starting at (0,0) 
 // after exploration the mouse is at (0,0) again
@@ -62,7 +208,6 @@ void explore(){
 	int current_X = 0;
 	int current_Y = 0;
 	char direction = 'N';
-	SET_VISITED(node[current_X][current_Y]);
 	
 	int run = 1;
 	while(run){
@@ -70,50 +215,44 @@ void explore(){
 		//update Walls from sensor data
 		setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
 		
+		SET_VISITED(node[current_X][current_Y]);
+		
 		//check wether there are unvisited neighbors or not 
 		//either go to unvisited cell or go back to last visited one
 		
 		if(neighborNorthUnvisited(current_X,current_Y)){
-			int temp = current_Y;
 			current_Y++;
-			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X][temp])+1));
-			SET_LAST_X(last[current_X][current_Y], current_X);
-			SET_LAST_Y(last[current_X][current_Y], temp);
-			SET_VISITED(node[current_X][current_Y]);
 			direction = 'N';
+			SET_LAST_X(last[current_X][current_Y], current_X);
+			SET_LAST_Y(last[current_X][current_Y], (current_Y-1));
+			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X][current_Y-1])+1));
 			
 			//TODO drive North
 			
-		} else if(neighborSouthUnvisited(current_X,current_Y)){
-			int temp = current_Y;
-			current_Y--;
-			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X][temp])+1));
-			SET_LAST_X(last[current_X][current_Y], current_X);
-			SET_LAST_Y(last[current_X][current_Y], temp);
-			SET_VISITED(node[current_X][current_Y]);
-			direction = 'S';
-			
-			//TODO drive South
-			
 		} else if(neighborEastUnvisited(current_X,current_Y)){
-			int temp = current_X;
 			current_X++;
-			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[temp][current_Y])+1));
-			SET_LAST_X(last[current_X][current_Y], temp);
-			SET_LAST_Y(last[current_X][current_Y], current_Y);
-			SET_VISITED(node[current_X][current_Y]);
 			direction = 'E';
+			SET_LAST_X(last[current_X][current_Y], (current_X-1));
+			SET_LAST_Y(last[current_X][current_Y], current_Y);
+			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X-1][current_Y])+1));
 			
 			//TODO drive East
 			
+		} else if(neighborSouthUnvisited(current_X,current_Y)){
+			current_Y--;
+			direction = 'S';
+			SET_LAST_X(last[current_X][current_Y], current_X);
+			SET_LAST_Y(last[current_X][current_Y], (current_Y+1));
+			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X][current_Y+1])+1));
+			
+			//TODO drive South
+			
 		} else if(neighborWestUnvisited(current_X,current_Y)){
-			int temp = current_X;
 			current_X--;
-			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[temp][current_Y])+1));
-			SET_LAST_X(last[current_X][current_Y], temp);
-			SET_LAST_Y(last[current_X][current_Y], current_Y);
-			SET_VISITED(node[current_X][current_Y]);
 			direction = 'W';
+			SET_LAST_X(last[current_X][current_Y], (current_X+1));
+			SET_LAST_Y(last[current_X][current_Y], current_Y);
+			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X+1][current_Y])+1));
 			
 			//TODO drive West
 			
@@ -132,47 +271,95 @@ void explore(){
 				run = 0;
 		}
 	}	
+	
+	//again update all distances
+	int i, j, k;
+	for(k = 0 ; k < 6 ; k++)
+		for(i = 0 ; i < 6 ; i++){
+			for(j = 0 ; j < 6 ; j++){
+				updateDistanceNorth(i, j);
+				updateDistanceEast(i, j);
+				updateDistanceSouth(i, j);
+				updateDistanceWest(i, j);
+			}
+		}
+}
+
+void updateDistanceNorth(int X, int Y){
+	if(!NORTH_Wall(node[X][Y])){
+		int dist = DISTANCE(node[X][Y]);
+		int minimum = min(dist, (DISTANCE(node[X][Y+1])+1));
+		if(minimum < dist){
+			SET_DISTANCE(node[X][Y], minimum);
+			SET_LAST_X(last[X][Y], X);
+			SET_LAST_Y(last[X][Y], (Y+1));
+		}
+	}
+}
+
+void updateDistanceEast(int X, int Y){
+	if(!EAST_Wall(node[X][Y])){
+		int dist = DISTANCE(node[X][Y]);
+		int minimum = min(dist, (DISTANCE(node[X+1][Y])+1));
+		if(minimum < dist){
+			SET_DISTANCE(node[X][Y], minimum);
+			SET_LAST_X(last[X][Y], (X+1));
+			SET_LAST_Y(last[X][Y], Y);
+		}
+	}
+}
+
+void updateDistanceSouth(int X, int Y){
+	if(!SOUTH_Wall(node[X][Y])){
+		int dist = DISTANCE(node[X][Y]);
+		int minimum = min(dist, (DISTANCE(node[X][Y-1])+1));
+		if(minimum < dist){
+			SET_DISTANCE(node[X][Y], minimum);
+			SET_LAST_X(last[X][Y], X);
+			SET_LAST_Y(last[X][Y], (Y-1));
+		}
+	}
+}
+
+void updateDistanceWest(int X, int Y){
+	if(!WEST_Wall(node[X][Y])){
+		int dist = DISTANCE(node[X][Y]);
+		int minimum = min(dist, (DISTANCE(node[X-1][Y])+1));
+		if(minimum < dist){
+			SET_DISTANCE(node[X][Y], minimum);
+			SET_LAST_X(last[X][Y], (X-1));
+			SET_LAST_Y(last[X][Y], Y);
+		}
+	}
 }
 
 //checks if there is an unvisited neighbor in the north
-//else updates distance
 
 int neighborNorthUnvisited(int X, int Y){
 	int check = 0;
-	if(!NORTH_Wall(node[X][Y])){
+	if(!NORTH_Wall(node[X][Y]))
 		if(!VISITED(node[X][Y+1]))
 			check = 1;
-		else
-			SET_DISTANCE(node[X][Y], min(DISTANCE(node[X][Y]), DISTANCE(node[X][Y+1])+1));
-    }
 	return check;
 }
 
 //checks if there is an unvisited neighbor in the east
-//else updates distance
 
 int neighborEastUnvisited(int X, int Y){
 	int check = 0;
-	if(!EAST_Wall(node[X][Y])){
+	if(!EAST_Wall(node[X][Y]))
 		if(!VISITED(node[X+1][Y]))
 			check = 1;
-		else
-			SET_DISTANCE(node[X][Y], min(DISTANCE(node[X][Y]), DISTANCE(node[X+1][Y])+1));
-    }
 	return check;
 }
 
 //checks if there is an unvisited neighbor in the south
-//else updates distances
 
 int neighborSouthUnvisited(int X, int Y){
 	int check = 0;
-	if(!SOUTH_Wall(node[X][Y])){
+	if(!SOUTH_Wall(node[X][Y]))
 		if(!VISITED(node[X][Y-1]))
 			check = 1;
-		else
-			SET_DISTANCE(node[X][Y], min(DISTANCE(node[X][Y]), DISTANCE(node[X][Y-1])+1));
-    }
 	return check;
 }
 
@@ -181,12 +368,9 @@ int neighborSouthUnvisited(int X, int Y){
 
 int neighborWestUnvisited(int X, int Y){
 	int check = 0;
-	if(!WEST_Wall(node[X][Y])){
+	if(!WEST_Wall(node[X][Y]))
 		if(!VISITED(node[X-1][Y]))
 			check = 1;
-		else
-			SET_DISTANCE(node[X][Y], min(DISTANCE(node[X][Y]), DISTANCE(node[X-1][Y])+1));
-    }
 	return check;
 }
 
