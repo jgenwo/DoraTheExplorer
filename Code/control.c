@@ -186,3 +186,46 @@ void turn_right(){
     drive_motor('R', vel_control_right.value);
 }
 
+void turn_left(){
+    
+    pos_control_left.target = -932;
+    pos_control_right.target = 932;
+    
+    evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
+    evaluate_controller(&pos_control_right, (long)(longpos2 + POS2CNT));
+    
+    vel_control_left.target = pos_control_left.value;
+    vel_control_right.target = pos_control_right.value;
+    
+    evaluate_controller(&vel_control_left, (long)current_speed1);
+    evaluate_controller(&vel_control_right, (long)current_speed2);
+    
+    drive_motor('L', vel_control_left.value);
+    drive_motor('R', vel_control_right.value);
+}
+
+void go_one_straight(){
+    
+    /*Given we take the big wheels, the number to set dist roughly calculates as:
+    d*112 ; where d is the distance to be travelled in cm */
+    
+    int dist = 1120;
+    
+    pos_control_leftIn .target = dist;
+    pos_control_right.target = dist;
+    
+    evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
+    evaluate_controller(&pos_control_right, (long)(longpos2 + POS2CNT));
+    
+    vel_control_left.target = pos_control_left.value;
+    vel_control_right.target = pos_control_right.value;
+    
+    evaluate_controller(&vel_control_left, (long)current_speed1);
+    evaluate_controller(&vel_control_right, (long)current_speed2);
+    
+    drive_motor('L', vel_control_left.value);
+    drive_motor('R', vel_control_right.value);
+}
+
+
+
