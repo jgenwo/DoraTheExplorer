@@ -107,6 +107,9 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
      (time until the 16cm have been crossed)
      flag = 0;
      go_one_cell();
+     *
+     * I think it'd be good practice to set "flag" to 0 anytime a new movement
+     * command is issued
      */
     
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
