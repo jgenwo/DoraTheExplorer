@@ -22,6 +22,8 @@ int kd = 1;
 int motor1_wanted_speed = 1;
 int motor2_wanted_speed = 1;
 
+char flag[] = "";
+
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
 PID_Controller pos_control_right = {.kp = 1, .ki = 0, .kd = 0,
@@ -124,8 +126,6 @@ void stop(){
 /*Here is another try to a more general and generic version of the PID that
  will probably work nicer in the controller cascade*/
 
-PID_Controller f;
-
 void evaluate_controller(PID_Controller *controller, long int current_control_value) {
     
     (*controller).error = (*controller).target - current_control_value ;
@@ -211,7 +211,7 @@ void go_one_straight(){
     
     int dist = 1120;
     
-    pos_control_leftIn .target = dist;
+    pos_control_left.target = dist;
     pos_control_right.target = dist;
     
     evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
