@@ -176,6 +176,20 @@ void turn_right() {
     flag = 2;
     }
 }
+
+void turn_left() {
+    
+    if (flag != 3) {
+    
+    GET_ENCODER_VALUE_1(current_pos1);
+    GET_ENCODER_VALUE_2(current_pos2);
+    
+    pos_control_left.target = current_pos1 - 932;
+    pos_control_right.target = current_pos2 + 932;
+    
+    flag = 3;
+    }
+}
 /*
 void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
                             int top_lim, int bot_lim, int target) {
