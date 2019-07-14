@@ -163,32 +163,66 @@ void motor_control() {
     drive_motor('R', vel_control_right.value);
 }
 
+void go_one_cell() {
+    
+    /*Given we take the big wheels, the number to set dist roughly calculates as:
+    d*112 ; where d is the distance to be travelled in cm*/
+    
+    if (flag != 1) {
+        
+        int d = 1792;
+    
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+    
+        pos_control_left.target = current_pos1 + d;
+        pos_control_right.target = current_pos2 + d;
+    
+        flag = 1;
+    }
+}
+
 void turn_right() {
     
     if (flag != 2) {
     
-    GET_ENCODER_VALUE_1(current_pos1);
-    GET_ENCODER_VALUE_2(current_pos2);
-    
-    pos_control_left.target = current_pos1 + 932;
-    pos_control_right.target = current_pos2 - 932;
-    
-    flag = 2;
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+
+        pos_control_left.target = current_pos1 + 932;
+        pos_control_right.target = current_pos2 - 932;
+
+        flag = 2;
     }
 }
 
 void turn_left() {
     
     if (flag != 3) {
-    
-    GET_ENCODER_VALUE_1(current_pos1);
-    GET_ENCODER_VALUE_2(current_pos2);
-    
-    pos_control_left.target = current_pos1 - 932;
-    pos_control_right.target = current_pos2 + 932;
-    
-    flag = 3;
+
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+
+        pos_control_left.target = current_pos1 - 932;
+        pos_control_right.target = current_pos2 + 932;
+
+        flag = 3;
     }
+}
+
+void turn_180() {
+    
+    if (flag != 4) {
+
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+
+        pos_control_left.target = current_pos1 - 1864;
+        pos_control_right.target = current_pos2 + 1864;
+
+        flag = 4;
+    }
+    
 }
 /*
 void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
