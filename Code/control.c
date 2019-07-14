@@ -22,7 +22,7 @@ int kd = 1;
 int motor1_wanted_speed = 1;
 int motor2_wanted_speed = 1;
 
-char flag[] = "";
+int flag = 0;
 
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
@@ -45,7 +45,7 @@ void motor_set_speed(char motor, int wanted_speed)
 }
 
 // Function to be periodically called to actually control motor
-void motor_control(char motor, int current_angular_speed)
+void motor_control_old(char motor, int current_angular_speed)
 {
     // initialize needed local variables once
     static int error = 0;
@@ -148,6 +148,35 @@ void evaluate_controller(PID_Controller *controller, long int current_control_va
  
 }
 
+void motor_control() {
+    
+    evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
+    evaluate_controller(&pos_control_right, (long)(longpos2 + POS2CNT));
+    
+    vel_control_left.target = pos_control_left.value;
+    vel_control_right.target = pos_control_right.value;
+    
+    evaluate_controller(&vel_control_left, (long)current_speed1);
+    evaluate_controller(&vel_control_right, (long)current_speed2);
+    
+    drive_motor('L', vel_control_left.value);
+    drive_motor('R', vel_control_right.value);
+}
+
+void turn_right() {
+    
+    if (flag != 2) {
+    
+    GET_ENCODER_VALUE_1(current_pos1);
+    GET_ENCODER_VALUE_2(current_pos2);
+    
+    pos_control_left.target = current_pos1 + 932;
+    pos_control_right.target = current_pos2 - 932;
+    
+    flag = 2;
+    }
+}
+/*
 void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
                             int top_lim, int bot_lim, int target) {
     (*controller).kp = kp;
@@ -207,7 +236,7 @@ void turn_left(){
 void go_one_straight(){
     
     /*Given we take the big wheels, the number to set dist roughly calculates as:
-    d*112 ; where d is the distance to be travelled in cm */
+    d*112 ; where d is the distance to be travelled in cm
     
     int dist = 1120;
     
@@ -226,6 +255,7 @@ void go_one_straight(){
     drive_motor('L', vel_control_left.value);
     drive_motor('R', vel_control_right.value);
 }
+*/
 
 
 
