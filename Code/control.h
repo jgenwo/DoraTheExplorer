@@ -64,8 +64,10 @@ void stop();
 void evaluate_controller(PID_Controller *controller, long int current_control_value);
 void initialize_controller(PID_Controller *controller, int kp, int ki, int kd,
                             int top_lim, int bot_lim, int target);
+void go_one_cell();
 void turn_right();
 void turn_left();
+void turn_180();
 
 #endif	/* CONTROL_H */
 
