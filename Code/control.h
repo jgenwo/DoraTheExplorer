@@ -55,6 +55,7 @@ extern PID_Controller pos_control_left;
 extern PID_Controller pos_control_right;
 extern PID_Controller vel_control_left;
 extern PID_Controller vel_control_right;
+extern int flag;
 
 //void motor_control(char motor, int current_angular_speed);
 void motor_control();

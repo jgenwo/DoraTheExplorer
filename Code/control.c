@@ -166,7 +166,10 @@ void motor_control() {
 void go_one_cell() {
     
     /*Given we take the big wheels, the number to set dist roughly calculates as:
-    d*112 ; where d is the distance to be travelled in cm*/
+    d*112 ; where d is the distance to be travelled in cm
+     
+    To go more than one cell ahead, you have to set the flag to 0 manually and
+    then call go_one_cell() again, otherwise it will only go one cell ahead*/
     
     if (flag != 1) {
         

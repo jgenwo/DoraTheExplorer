@@ -86,6 +86,29 @@ int forward = -1;
 // atm it's just one motor though.
 void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
 {
+    /*Explanation on how movement works now: 
+     The function motor_control() automatically evaluates and executes
+     the whole controller cascade automatically. The values for this
+     evaluation are set in the following functions:
+     * 
+     - go_one_cell() moves 16cm forward from current position
+     * 
+     - turn_right() turns 90° right
+     * 
+     - turn_left() turns 90° left
+     * 
+     - turn_180() turns around 180°
+     * 
+     IMPORTANT: If you want to call the same function twice (for example move
+     * 16cm forward and afterwards move another 16cm forward, calling
+     * go_one_cell() again), the variable "flag" has to be set
+     to 0 manually once before calling the function again, for example like this:
+     go_one_cell()
+     (time until the 16cm have been crossed)
+     flag = 0;
+     go_one_cell();
+     */
+    
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
     calculate_speed('L'); // Call function from qei.c to calculate current speed
     calculate_speed('R'); // Call function from qei.c to calculate current speed2
@@ -171,4 +194,5 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
             go_straight(-speed);
     }*/
     sendNameValue("test", 5);
+    motor_control();
 }
