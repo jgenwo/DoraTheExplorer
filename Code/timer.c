@@ -1,15 +1,9 @@
 
 #include "timer.h"
 #include "gpio.h"
-#include "uart.h"
 #include "xc.h"
-#include "dma.h"
-#include "sensor.h"
-#include "stdio.h"
 #include "qei.h"
 #include "control.h"
-#include "pwm.h"
-#include "stdio.h"
 
 
 void initTimer1(unsigned int period)
@@ -29,6 +23,11 @@ void initTimer1(unsigned int period)
 void startTimer1(void)
 {
     T1CONbits.TON = 1; //
+}
+
+void stopTimer1(void)
+{
+    T1CONbits.TON = 0; //
 }
 
 void initTimer2(unsigned int period)
@@ -79,8 +78,10 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     }
 }
 
-int speed = 20;
-int forward = -1;
+//int speed = 20;
+//int forward = -1;
+//int i, j;
+char comm = ' ';
 
 // Timer that is there to constantly update the current speed of the motors
 // atm it's just one motor though.
@@ -93,11 +94,11 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
      * 
      - go_one_cell() moves 16cm forward from current position
      * 
-     - turn_right() turns 90° right
+     - turn_right() turns 90ï¿½ right
      * 
-     - turn_left() turns 90° left
+     - turn_left() turns 90ï¿½ left
      * 
-     - turn_180() turns around 180°
+     - turn_180() turns around 180ï¿½
      * 
      IMPORTANT: If you want to call the same function twice (for example move
      * 16cm forward and afterwards move another 16cm forward, calling
@@ -115,7 +116,22 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
     calculate_speed('L'); // Call function from qei.c to calculate current speed
     calculate_speed('R'); // Call function from qei.c to calculate current speed2
-        
+    
+    //comm is set in maze.c
+    //flag is reset in maze.c
+    //waiting time is included in maze.c
+    if(comm == 'f'){
+        go_one_cell();            
+    } else if(comm == 'r'){
+        turn_right();        
+    } else if (comm == 'l'){
+        turn_left();  
+    } else if (comm == 't'){
+        turn_180();  
+    }
+    motor_control();
+    
+    
     /**if(run == 119){
         go_straight(speed);
         forward = 1;
@@ -196,6 +212,4 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
         else if(forward == 0)
             go_straight(-speed);
     }*/
-    sendNameValue("test", 5);
-    motor_control();
 }

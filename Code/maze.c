@@ -49,21 +49,28 @@ int last[6][6] = {
 
 char *path;	
 
+// Time needed for 1 actual movement (turn,forward, etc.)
+//    int i, j;
+//    for (j = 0; j < time; j++)
+//        for (i = 0; i < 20000; i++)
+//            ; // short delay
+int time = 300;
+
 
 // executes the path computed in shortestPath
 
 void driveSP(){
 	int i, n = strlen(path);
 	for(i = n-1 ; i >= 0 ; i--){
-		char command = path[i];
-		if(command == 'f')
-			; //TODO go 1 cell forward
-		else if(command == 'r')
-			; //TODO go right and 1 cell forward
-		else if(command == 'l')
-			; //TODO go left and 1 cell forward
-		else if(command == 'b')
-			; //TODO go 1 cell backsward
+		char com = path[i];
+		if(com == 'f')
+			maze_forward(time);
+		else if(com == 'r')
+			maze_turn_right(time);
+		else if(com == 'l')
+			maze_turn_left(time);
+		else if(com == 'b')
+			maze_turn_180(time);
 	}
 }
 
@@ -213,7 +220,7 @@ void explore(){
 	while(run){
 		
 		//update Walls from sensor data
-		setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
+		//setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
 		
 		SET_VISITED(node[current_X][current_Y]);
 		
@@ -222,51 +229,77 @@ void explore(){
 		
 		if(neighborNorthUnvisited(current_X,current_Y)){
 			current_Y++;
-			direction = 'N';
 			SET_LAST_X(last[current_X][current_Y], current_X);
 			SET_LAST_Y(last[current_X][current_Y], (current_Y-1));
 			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X][current_Y-1])+1));
 			
-			//TODO drive North
-			
+            if(direction == 'N'){
+                maze_forward(time);
+            } else if(direction == 'S'){
+                maze_turn_180(time);
+            } else if(direction == 'E'){
+                maze_turn_left(time);
+            } else if(direction == 'W'){
+                maze_turn_right(time);
+            }
+			direction = 'N';
 		} else if(neighborEastUnvisited(current_X,current_Y)){
 			current_X++;
-			direction = 'E';
 			SET_LAST_X(last[current_X][current_Y], (current_X-1));
 			SET_LAST_Y(last[current_X][current_Y], current_Y);
 			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X-1][current_Y])+1));
 			
-			//TODO drive East
-			
+			if(direction == 'N'){
+                maze_turn_right(time);
+            } else if(direction == 'S'){
+                maze_turn_left(time);
+            } else if(direction == 'E'){
+                maze_forward(time);
+            } else if(direction == 'W'){
+                maze_turn_180(time);
+            }
+            direction = 'E';		
 		} else if(neighborSouthUnvisited(current_X,current_Y)){
 			current_Y--;
-			direction = 'S';
 			SET_LAST_X(last[current_X][current_Y], current_X);
 			SET_LAST_Y(last[current_X][current_Y], (current_Y+1));
 			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X][current_Y+1])+1));
 			
-			//TODO drive South
-			
+            if(direction == 'N'){
+                maze_turn_180(time);
+            } else if(direction == 'S'){
+                maze_forward(time);
+            } else if(direction == 'E'){
+                maze_turn_right(time);
+            } else if(direction == 'W'){
+                maze_turn_left(time);
+            }
+			direction = 'S';
 		} else if(neighborWestUnvisited(current_X,current_Y)){
 			current_X--;
-			direction = 'W';
 			SET_LAST_X(last[current_X][current_Y], (current_X+1));
 			SET_LAST_Y(last[current_X][current_Y], current_Y);
 			SET_DISTANCE(node[current_X][current_Y], (DISTANCE(node[current_X+1][current_Y])+1));
 			
-			//TODO drive West
-			
+			if(direction == 'N'){
+                maze_turn_left(time);
+            } else if(direction == 'S'){
+                maze_turn_right(time);
+            } else if(direction == 'E'){
+                maze_turn_180(time);
+            } else if(direction == 'W'){
+                maze_forward(time);
+            }
+			direction = 'W';
 		} else if(current_X == 0 && current_Y == 0)
 			run = 0;
 		else {
 			int new_X = LAST_X(last[current_X][current_Y]);
 			int new_Y = LAST_Y(last[current_X][current_Y]);
 			if (new_X < 6 && new_Y < 6){
+                direction = driveToLast(current_X, current_Y, new_X, new_Y, direction, time);
 				current_X = new_X;
 				current_Y = new_Y;
-				
-				//TODO drive back to last
-				
 			} else
 				run = 0;
 		}
@@ -283,6 +316,98 @@ void explore(){
 				updateDistanceWest(i, j);
 			}
 		}
+}
+
+// drives the robot to the last recent cell and returns the new direction
+
+char driveToLast(int current_X, int current_Y, int new_X, int new_Y, char direction, int time){
+    char newDirection;
+    if(new_X > current_X){
+        if(direction == 'N'){
+            maze_turn_right(time);
+        } else if(direction == 'S'){
+            maze_turn_left(time);
+        } else if(direction == 'E'){
+            maze_forward(time);
+        } else if(direction == 'W'){
+            maze_turn_180(time);
+        }
+        newDirection = 'E';
+    } else if(new_X < current_X){
+        if(direction == 'N'){
+            maze_turn_left(time);
+        } else if(direction == 'S'){
+            maze_turn_right(time);
+        } else if(direction == 'E'){
+            maze_turn_180(time);
+        } else if(direction == 'W'){
+            maze_forward(time);
+        }
+        newDirection = 'W';
+    } else if(new_Y > current_Y){
+        if(direction == 'N'){
+            maze_forward(time);
+        } else if(direction == 'S'){
+            maze_turn_180(time);
+        } else if(direction == 'E'){
+            maze_turn_left(time);
+        } else if(direction == 'W'){
+            maze_turn_right(time);
+        }
+        newDirection = 'N';
+    } else if(new_Y < current_Y){
+        if(direction == 'N'){
+            maze_turn_180(time);
+        } else if(direction == 'S'){
+            maze_forward(time);
+        } else if(direction == 'E'){
+            maze_turn_right(time);
+        } else if(direction == 'W'){
+            maze_turn_left(time);
+        }
+        newDirection = 'S';        
+    }
+    return newDirection;
+}
+
+//turns the robot 180 degrees and goes one cell forward
+void maze_turn_180(int lim){
+    comm = 't';
+    wait(lim);
+    flag = 0;
+    comm = 'f';
+    wait(lim);
+    flag = 0;
+}
+
+//turns the robot right degrees and goes one cell forward
+
+void maze_turn_right(int lim){
+    comm = 'r';
+    wait(lim);
+    flag = 0;
+    comm = 'f';
+    wait(lim);
+    flag = 0;
+}
+
+//turns the robot left degrees and goes one cell forward
+
+void maze_turn_left(int lim){
+    comm = 'l';
+    wait(lim);
+    flag = 0;
+    comm = 'f';
+    wait(lim);
+    flag = 0;
+}
+
+//robot goes one cell forward
+
+void maze_forward(int lim){
+    comm = 'f';
+    wait(lim);
+    flag = 0;
 }
 
 void updateDistanceNorth(int X, int Y){
@@ -498,7 +623,7 @@ void setBorder(){
 	for(i = 1 ; i < 5 ; i++)
 		setWalls(0, i, 'E', 0, 0, 1);
 	
-	printmaze();
+	//printmaze();
 }
 
 //tries to print the maze
@@ -534,4 +659,11 @@ void printmaze(){
 
 int min(int a, int b){
 	return a < b ? a : b;
+}
+
+void wait(int lim){
+    int i, j;
+    for (j = 0; j < lim; j++)
+        for (i = 0; i < 20000; i++)
+            ; // short delay
 }

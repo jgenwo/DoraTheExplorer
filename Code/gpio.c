@@ -12,7 +12,7 @@ void initIO()
     // set digital port direction
     // inputs
     //all pins are inputs by default
-
+    
     //outputs
     TRISCbits.TRISC4 = 0; //LEDBack output / NOT WORKING YET
     TRISCbits.TRISC3 = 0; //LEDFront output
@@ -33,7 +33,7 @@ void initIO()
 
     RPINR16bits.QEA2R = 13; 
     RPINR16bits.QEB2R = 12;
-    
+        
     __builtin_write_OSCCONL(OSCCON | 0x40); // Lock PPS registers (lock again!)
 
     for (i = 0; i < 30000; i++)

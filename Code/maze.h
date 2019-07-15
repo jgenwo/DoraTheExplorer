@@ -4,6 +4,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include "timer.h"
+#include "control.h"
 
 #define VISITED(node)	(node & 0b0000100000000000)
 #define NORTH_Wall(node)(node & 0b0001000000000000)
@@ -25,6 +27,8 @@
 #define SET_LAST_X(last, value) (last = (last & 0x00FF) | (value << 8))
 #define SET_LAST_Y(last, value) (last = (last & 0xFF00) | value)
 
+extern int last[6][6];
+
 void driveSP();
 void shortestPath(int X, int Y, int distance);
 void explore();
@@ -43,5 +47,12 @@ int getLeft();
 int getFront();
 void setBorder();
 int min(int a, int b);
+void wait(int lim);
+char driveToLast(int current_X, int current_Y, int new_X, int new_Y, char direction, int time);
+void maze_forward(int lim);
+void maze_turn_left(int lim);
+void maze_turn_right(int lim);
+void maze_turn_180(int lim);
+
 
 #endif
