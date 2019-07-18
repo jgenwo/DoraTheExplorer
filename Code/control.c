@@ -162,7 +162,7 @@ void motor_control() {
     evaluate_controller(&vel_control_left, (long)current_speed1);
     evaluate_controller(&vel_control_right, (long)current_speed2);
     
-    if (flag == 1) {
+    if (flag == 1 && (rightWall() || leftWall())) {
         int dist_left = distance('l');
         if (dist_left == -1) {
             dist_left = 0;
@@ -171,8 +171,19 @@ void motor_control() {
         if (dist_right == -1) {
             dist_right = 0;
         }
-        drive_motor('L', (vel_control_left.value - correction*dist_left));
-        drive_motor('R', (vel_control_right.value - correction*dist_left));
+        if (rightWall() && leftWall()) {
+            drive_motor('L', (vel_control_left.value - correction*dist_left));
+            drive_motor('R', (vel_control_right.value - correction*dist_left)); 
+        } else if (rightWall()) {
+            int dist_miss = 15 - dist_right;
+            drive_motor('L', (vel_control_left.value - correction*dist_miss));
+            drive_motor('R', (vel_control_right.value + correction*dist_miss));
+        } else {
+            int dist_miss = 15 - dist_left;
+            drive_motor('L', (vel_control_left.value + correction*dist_miss));
+            drive_motor('R', (vel_control_right.value - correction*dist_miss));
+        }
+        
     } else {
        drive_motor('L', vel_control_left.value);
        drive_motor('R', vel_control_right.value); 
