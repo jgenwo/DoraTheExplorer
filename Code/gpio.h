@@ -13,8 +13,7 @@
 
 #define LED_Back  LATCbits.LATC4 // NOT WORKING YET
 #define LED_Front LATCbits.LATC3 
-
-//#TODO 
+ 
 //******* Define two bits as output bits for the first H-Bridge
 #define HBRIDGE1 LATAbits.LATA7 
 #define HBRIDGE2 LATBbits.LATB14 

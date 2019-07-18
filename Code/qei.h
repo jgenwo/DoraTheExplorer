@@ -31,26 +31,13 @@ extern long int distance2;
 #define WHEEL_CIRCONFERENCE 18900 //60mm * pi in 10micrometer
 #define DISTANCE_PER_CNT 9
 
-
-
 //Left motor
 #define GET_ENCODER_VALUE_1(POSITION_1) (POSITION_1 = longpos1 + POS1CNT)
 //Right motor
 #define GET_ENCODER_VALUE_2(POSITION_2) (POSITION_2 = longpos2 + POS2CNT)
 
-
-#ifdef __cplusplus
-
-extern "C"
-{
-#endif
-
-
-#ifdef __cplusplus
-}
-#endif
 void init_QEI();
 void calculate_speed(char motor);
 void calculate_position(char motor);
 long int calculate_distance();
-#endif /* QEI_H */
+#endif 

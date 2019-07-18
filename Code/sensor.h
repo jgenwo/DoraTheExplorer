@@ -9,7 +9,6 @@
 #define	SENSOR_H
 
 #ifdef	__cplusplus
-extern "C" {
 #endif
 
 int distance(char sensor);
@@ -20,5 +19,5 @@ int middle();
 }
 #endif
 
-#endif	/* SENSOR_H */
+#endif
 

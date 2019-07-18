@@ -97,10 +97,5 @@ void sendNameValue(char name[], int value){
 void __attribute__((__interrupt__,auto_psv)) _U1RXInterrupt(void)
 {
     IFS0bits.U1RXIF = 0; 
-    //int temp = U1RXREG;
-    //if(temp == 13 || temp == 10)
-    //    ;
-    //else
-    //    run =  temp;
 } 
 

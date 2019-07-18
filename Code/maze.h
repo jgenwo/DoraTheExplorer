@@ -55,5 +55,4 @@ void maze_turn_left(int lim);
 void maze_turn_right(int lim);
 void maze_turn_180(int lim);
 
-
 #endif

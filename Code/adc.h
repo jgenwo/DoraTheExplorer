@@ -12,10 +12,7 @@
 extern "C"
 {
 #endif
-
-    /*! \brief configures the 12bit analog-to-digital converter (ADC1).
- * 
- */
+    
     void setupADC1(void);
     void startADC1(void);
 
@@ -23,4 +20,4 @@ extern "C"
 }
 #endif
 
-#endif /* ADC_H */
+#endif 

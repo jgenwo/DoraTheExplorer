@@ -7,12 +7,7 @@ void initIO()
 
     // set up analogue pins
     AD1CON1bits.ADON = 0; // disable ADC1 module
-    AD1PCFGL = 0xFFFF;    //all pins are digital
-
-    // set digital port direction
-    // inputs
-    //all pins are inputs by default
-    
+    AD1PCFGL = 0xFFFF;    //all pins are digital    
     
     TRISAbits.TRISA10 = 1; //BUTTON
     

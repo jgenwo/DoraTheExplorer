@@ -78,9 +78,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     }
 }
 
-//int speed = 20;
-//int forward = -1;
-//int i, j;
 char comm = ' ';
 
 // Timer that is there to constantly update the current speed of the motors
@@ -130,86 +127,4 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
         turn_180();  
     }
     motor_control();
-    
-    
-    /**if(run == 119){
-        go_straight(speed);
-        forward = 1;
-    } else if(run == 115){
-        go_straight(-speed);
-        forward = 0;
-    } else if(run == 100)
-        turn_right();
-    else if(run == 97)
-        ;//turn_left();
-    else if(run == 113){
-        stop();
-        forward = -1;
-    } else if(run == 48){
-        speed = 0;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 48){
-        speed = 0;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 49){
-        speed = 2;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 50){
-        speed = 4;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 51){
-        speed = 6;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 52){
-        speed = 9;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 53){
-        speed = 12;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 54){
-        speed = 15;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 55){
-        speed = 18;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 56){
-        speed = 21;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    } else if(run == 57){
-        speed = 24;
-        if(forward)
-            go_straight(speed);
-        else if(forward == 0)
-            go_straight(-speed);
-    }*/
 }
