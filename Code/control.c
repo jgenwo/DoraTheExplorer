@@ -14,6 +14,7 @@
 #include "control.h"
 #include "uart.h"
 #include "stdio.h"
+#include "sensor.h"
 
 int kp = 1;
 int ki = 1; // This integral might create initial integrated error overflow
@@ -23,6 +24,8 @@ int motor1_wanted_speed = 1;
 int motor2_wanted_speed = 1;
 
 int flag = 0;
+
+int correction = 10;
 
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
@@ -159,8 +162,23 @@ void motor_control() {
     evaluate_controller(&vel_control_left, (long)current_speed1);
     evaluate_controller(&vel_control_right, (long)current_speed2);
     
-    drive_motor('L', vel_control_left.value);
-    drive_motor('R', vel_control_right.value);
+    if (flag == 1) {
+        int dist_left = distance('l');
+        if (dist_left == -1) {
+            dist_left = 0;
+        }
+        int dist_right = distance('r');
+        if (dist_right == -1) {
+            dist_right = 0;
+        }
+        drive_motor('L', (vel_control_left.value - correction*dist_left));
+        drive_motor('R', (vel_control_right.value - correction*dist_left));
+    } else {
+       drive_motor('L', vel_control_left.value);
+       drive_motor('R', vel_control_right.value); 
+    }
+    
+    
 }
 
 void go_one_cell() {
