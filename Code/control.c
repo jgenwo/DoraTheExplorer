@@ -159,9 +159,6 @@ void motor_control() {
     vel_control_left.target = pos_control_left.value;
     vel_control_right.target = pos_control_right.value;
     
-    evaluate_controller(&vel_control_left, (long)current_speed1);
-    evaluate_controller(&vel_control_right, (long)current_speed2);
-    
     if (flag == 1 && (rightWall() || leftWall())) {
         int dist_left = distance('l');
         if (dist_left == -1) {
@@ -171,25 +168,26 @@ void motor_control() {
         if (dist_right == -1) {
             dist_right = 0;
         }
+        int dist_diff = dist_left - dist_right;
         if (rightWall() && leftWall()) {
-            drive_motor('L', (vel_control_left.value - correction*dist_left));
-            drive_motor('R', (vel_control_right.value - correction*dist_left)); 
+            vel_control_left.target -= correction*dist_diff;
+            vel_control_right.target += correction*dist_diff; 
         } else if (rightWall()) {
-            int dist_miss = 15 - dist_right;
-            drive_motor('L', (vel_control_left.value - correction*dist_miss));
-            drive_motor('R', (vel_control_right.value + correction*dist_miss));
+            int dist_miss = dist_right - 15;
+            vel_control_left.target += correction*dist_miss;
+            vel_control_right.target -= correction*dist_miss;
         } else {
-            int dist_miss = 15 - dist_left;
-            drive_motor('L', (vel_control_left.value + correction*dist_miss));
-            drive_motor('R', (vel_control_right.value - correction*dist_miss));
+            int dist_miss = dist_left - 15;
+            vel_control_left.target -= correction*dist_miss;
+            vel_control_right.target += correction*dist_miss;
         }
-        
-    } else {
-       drive_motor('L', vel_control_left.value);
-       drive_motor('R', vel_control_right.value); 
     }
     
+    evaluate_controller(&vel_control_left, (long)current_speed1);
+    evaluate_controller(&vel_control_right, (long)current_speed2);
     
+    drive_motor('L', vel_control_left.value);
+    drive_motor('R', vel_control_right.value);     
 }
 
 void go_one_cell() {
