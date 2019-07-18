@@ -218,6 +218,10 @@ void explore(){
 	
 	int run = 1;
 	while(run){
+        
+        sendNameValue("X", current_X);
+        sendNameValue("Y", current_Y);
+        sendNameValue("D", direction);
 		
 		//update Walls from sensor data
 		//setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());

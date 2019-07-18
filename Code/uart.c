@@ -76,7 +76,7 @@ void sendNameValue(char name[], int value){
     while(U1STAbits.UTXBF)
         ;
     U1TXREG = ' ';
-    char buffer[10];
+    char buffer[5];
     sprintf(buffer, "%d", value);
     i = 0, n = strlen(buffer);
     while(i < n){
@@ -97,10 +97,10 @@ void sendNameValue(char name[], int value){
 void __attribute__((__interrupt__,auto_psv)) _U1RXInterrupt(void)
 {
     IFS0bits.U1RXIF = 0; 
-    int temp = U1RXREG;
-    if(temp == 13 || temp == 10)
-        ;
-    else
-        run =  temp;
+    //int temp = U1RXREG;
+    //if(temp == 13 || temp == 10)
+    //    ;
+    //else
+    //    run =  temp;
 } 
 

@@ -6,12 +6,14 @@ import view.AnimationTimer;
 import view.BlView;
 import view.InfoView;
 
+import javax.bluetooth.RemoteDevice;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Timer;
+import java.util.Vector;
 
 public class Controller extends JFrame {
 
@@ -36,8 +38,26 @@ public class Controller extends JFrame {
         timer = new java.util.Timer();
         task = new AnimationTimer(this);
         timer.scheduleAtFixedRate(task, 0, 20);
-
-        //switchToInfo(new InfoView(this));
+        switchToInfo(new InfoView(this));
+        try {
+            bluetooth.search();
+        } catch (IOException e) {
+        } catch (InterruptedException e) {
+        }
+        Vector<RemoteDevice> vr =  bluetooth.getDevicesDiscovered();
+        int index = 0;
+        try {
+            for (RemoteDevice rd : vr) {
+                if (rd.getFriendlyName(false).startsWith("DSD TECH")) {
+                    bluetooth.serial_service(index);
+                    Vector<String> vs = bluetooth.getServiceFound();
+                    bluetooth.connect(vs.get(0));
+                    System.out.println("Connected!!!");
+                    info_view.setPeriodic();
+                }
+                index++;
+            }
+        } catch (Exception e){}
     }
 
     public void switchToInfo(InfoView info_view) {
@@ -63,47 +83,18 @@ public class Controller extends JFrame {
     }
 
     public int[] getData() {
-        return new int[]{model.getFront(), model.getRight(), model.getLeft(), model.getX(), model.getY(), model.getEncoder_right(), model.getEncoder_left()};
+        return new int[]{model.getFront(), model.getRight(), model.getLeft(), model.getX(), model.getY(), model.getDirection()};
     }
 
     public void refresh() {
-        int[] dat;
-        String data = "";
-        try {
-            bluetooth.write("RTS");
-            data = bluetooth.read();
-        } catch (IOException e) {
-        }
+        String data = bluetooth.read();
         System.out.println(data);
-        dat = parseData(data);
-        if (dat.length == 7) {
-            model.setFront(dat[0]);
-            model.setRight(dat[1]);
-            model.setLeft(dat[2]);
-            model.setX(dat[3]);
-            model.setY(dat[4]);
-            model.setEncoder_right(dat[5]);
-            model.setEncoder_left(dat[6]);
-        }
-    }
-
-    /**
-     * @param data "U{F:value;R:value;L:value;X:value;Y:value;ER:value;EL:value;}"
-     * @return
-     */
-    public int[] parseData(String data) {
-        int[] dat = new int[7];
-        if (data.startsWith("U{")) {
-            data = data.substring(data.indexOf('{') + 1, data.indexOf('}'));
-            for (int i = 0; i < dat.length; i++) {
-                try {
-                    dat[i] = Integer.parseInt(data.substring(data.indexOf(':') + 1, data.indexOf(';')));
-                } catch (NumberFormatException e) {
-                }
-                data = data.substring(data.indexOf(";") + 1);
-            }
-        }
-        return dat;
+        if(data.startsWith("X"))
+            model.setX(Integer.parseInt(data.substring(data.indexOf(' ')+1)));
+        else if(data.startsWith("Y"))
+            model.setY(Integer.parseInt(data.substring(data.indexOf(' ')+1)));
+        else if(data.startsWith("D"))
+            model.setDirection(Integer.parseInt(data.substring(data.indexOf(' ')+1)));
     }
 
 

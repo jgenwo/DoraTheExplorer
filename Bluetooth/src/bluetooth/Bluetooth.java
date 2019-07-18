@@ -107,12 +107,12 @@ public class Bluetooth {
 
         os = streamConnection.openOutputStream();
         is = streamConnection.openInputStream();
+        in = new BufferedReader(new InputStreamReader(is));
 
     }
 
     public String read() {
         String read = "";
-        in = new BufferedReader(new InputStreamReader(is));
         try {
             read = in.readLine();
         } catch (IOException e) {

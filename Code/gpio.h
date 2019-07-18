@@ -9,6 +9,8 @@
 #define	GPIO_H
 #include "xc.h"
 
+#define BUTTON PORTAbits.RA10 //BUTTON
+
 #define LED_Back  LATCbits.LATC4 // NOT WORKING YET
 #define LED_Front LATCbits.LATC3 
 

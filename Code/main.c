@@ -72,7 +72,7 @@ int main(void)
         while (OSCCONbits.LOCK != 1)
             ; //Wait for PPL to lock
     }
-    //initUART();
+    initUART();
     initIO();
     init_QEI(); // init QEI before timers cause one of the timer calls needs it
     initTimer1(6250); //6250 gives 10ms timer interrupt, based on a 1.6 us base = 40MIPS with 64 prescaler
@@ -89,9 +89,6 @@ int main(void)
     // in explore() has to be commented in to set the real borders
     setBorder();
     
-    //explores the maze
-    explore();
-    
     //computes shortest path to (X;Y)
     //int X = 1, Y = 3;
     //shortestPath(X, Y, DISTANCE(last[X][Y]));
@@ -100,6 +97,10 @@ int main(void)
     //driveSP();
      
     while(1){
+        if(BUTTON){ //PRESS the BUTTON
+            //explores the maze
+            explore();
+        }      
     };
     return 0;
 }

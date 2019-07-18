@@ -13,6 +13,9 @@ void initIO()
     // inputs
     //all pins are inputs by default
     
+    
+    TRISAbits.TRISA10 = 1; //BUTTON
+    
     //outputs
     TRISCbits.TRISC4 = 0; //LEDBack output / NOT WORKING YET
     TRISCbits.TRISC3 = 0; //LEDFront output
