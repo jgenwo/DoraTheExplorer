@@ -19,8 +19,8 @@
 #define HBRIDGE2 LATAbits.LATA10 
 
 //******* Define two bits as output bits for the second H-Bridge
-#define HBRIDGE3 LATBbits.LATB11 
-#define HBRIDGE4 LATBbits.LATB10
+#define HBRIDGE4 LATBbits.LATB11 
+#define HBRIDGE3 LATBbits.LATB10
 
 
 void initIO();

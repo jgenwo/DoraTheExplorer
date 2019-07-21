@@ -111,7 +111,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
      * I think it'd be good practice to set "flag" to 0 anytime a new movement
      * command is issued
      */
-    
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
     calculate_speed('L'); // Call function from qei.c to calculate current speed
     calculate_speed('R'); // Call function from qei.c to calculate current speed2

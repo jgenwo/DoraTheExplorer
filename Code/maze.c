@@ -54,7 +54,7 @@ char *path;
 //    for (j = 0; j < time; j++)
 //        for (i = 0; i < 20000; i++)
 //            ; // short delay
-int time = 300;
+int time = 500;
 
 
 // executes the path computed in shortestPath
