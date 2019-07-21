@@ -9,18 +9,18 @@
 #define	GPIO_H
 #include "xc.h"
 
-#define BUTTON PORTAbits.RA10 //BUTTON
+#define BUTTON PORTBbits.RB14 //BUTTON
 
-#define LED_Back  LATCbits.LATC4 // NOT WORKING YET
-#define LED_Front LATCbits.LATC3 
+#define LED_Back  LATBbits.LATB12 
+#define LED_Front LATAbits.LATA8 // not assembled yet
  
 //******* Define two bits as output bits for the first H-Bridge
 #define HBRIDGE1 LATAbits.LATA7 
-#define HBRIDGE2 LATBbits.LATB14 
+#define HBRIDGE2 LATAbits.LATA10 
 
 //******* Define two bits as output bits for the second H-Bridge
-#define HBRIDGE3 LATBbits.LATB9 
-#define HBRIDGE4 LATCbits.LATC6
+#define HBRIDGE3 LATBbits.LATB11 
+#define HBRIDGE4 LATBbits.LATB10
 
 
 void initIO();

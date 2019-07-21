@@ -4,6 +4,8 @@
 #include "xc.h"
 #include "qei.h"
 #include "control.h"
+#include "uart.h"
+#include "dma.h"
 
 
 void initTimer1(unsigned int period)
@@ -127,4 +129,8 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
         turn_180();  
     }
     motor_control();
+    
+    sendNameValue("F", adcData[0]);
+    sendNameValue("R", adcData[1]);
+    sendNameValue("L", adcData[2]);
 }

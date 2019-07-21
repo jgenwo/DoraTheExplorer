@@ -15,8 +15,7 @@ int run;
 
 void initUART()
 {
-    RPOR4bits.RP8R = 0b00011;
-    RPINR18bits.U1RXR = 7;
+    
     IPC3bits.U1TXIP = 7;
 
     U1MODEbits.STSEL = 0;   // 1-Stop bit

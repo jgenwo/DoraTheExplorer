@@ -50,11 +50,11 @@ void init_PWM()
 
     PWM1CON1bits.PEN1H = 0; // PWM1H is controlled by GPIO module
     PWM1CON1bits.PEN1L = 1; // PWM1L is controlled by PWM module
-    // PIN 26 is used as PWM output PIN for motor 1
+    // PIN 26 is used as PWM output PIN for motor 1 (can be removed?))
 
-    PWM2CON1bits.PEN1H = 0; // PWM3H is controlled by GPIO module
-    PWM2CON1bits.PEN1L = 1; // PWM3L is controlled by PWM module
-    // PIN 24 is used as PWM output PIN for motor 2
+    PWM2CON1bits.PEN1H = 0; // PWM2H is controlled by GPIO module
+    PWM2CON1bits.PEN1L = 1; // PWM2L is controlled by PWM module
+    // PIN 24 is used as PWM output PIN for motor 2 (can be removed?))
 
     P1TCONbits.PTEN = 1; // Enable the PWM Module
     P2TCONbits.PTEN = 1;    
