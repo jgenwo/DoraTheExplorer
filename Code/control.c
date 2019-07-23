@@ -12,8 +12,7 @@
 #include "gpio.h"
 #include "qei.h"
 #include "control.h"
-#include "uart.h"
-#include "stdio.h"
+//#include "uart.h"
 #include "sensor.h"
 
 int kp = 1;
@@ -25,7 +24,8 @@ int motor2_wanted_speed = 1;
 
 int flag = 0;
 
-int correction = 5;
+int correction = 1;
+int correction2 = 0.5;
 
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
@@ -159,7 +159,25 @@ void motor_control() {
     vel_control_left.target = pos_control_left.value;
     vel_control_right.target = pos_control_right.value;
     
-    if (flag == 1 && (rightWall() || leftWall())) {
+    /*if (flag == 1 && frontWall() && distance('f')<= 20) {
+        if (distance('f') != -1) {
+            
+            fast_stop_motor('l');
+            fast_stop_motor('r');
+            flag = 0;
+        }
+    } else */
+    
+    
+    
+    if (flag == 1) {
+        int dist_front = distance('f');
+        if (frontWall() && dist_front != -1 && dist_front <= 20) {
+            fast_stop_motor('l');
+            fast_stop_motor('r');
+            flag = 0;
+        }
+     else if (flag == 1 && (rightWall() || leftWall())) {
         int dist_left = distance('l');
         if (dist_left == -1) {
             dist_left = 0;
@@ -171,16 +189,17 @@ void motor_control() {
         int dist_diff = dist_left - dist_right;
         if (rightWall() && leftWall()) {
             vel_control_left.target -= correction*dist_diff;
-            vel_control_right.target += correction*dist_diff; 
+            vel_control_right.target += correction*dist_diff;
         } else if (rightWall()) {
-            int dist_miss = dist_right - 15;
-            vel_control_left.target += correction*dist_miss;
-            vel_control_right.target -= correction*dist_miss;
+            int dist_miss = dist_right - 20;
+            vel_control_left.target += (int)correction2*dist_miss;
+            vel_control_right.target -= (int)correction2*dist_miss;
         } else {
-            int dist_miss = dist_left - 15;
-            vel_control_left.target -= correction*dist_miss;
-            vel_control_right.target += correction*dist_miss;
+            int dist_miss = dist_left - 20;
+            vel_control_left.target -= (int)correction2*dist_miss;
+            vel_control_right.target += (int)correction2*dist_miss;
         }
+    }
     }
     
     evaluate_controller(&vel_control_left, (long)current_speed1);
@@ -200,7 +219,7 @@ void go_one_cell() {
     
     if (flag != 1) {
         
-        int d = 1792;
+        int d = 1960;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);

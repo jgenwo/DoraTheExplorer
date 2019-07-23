@@ -14,6 +14,7 @@
 int distance(char sensor);
 int rightWall();
 int leftWall();
+int frontWall();
 int middle();
 #ifdef	__cplusplus
 }
