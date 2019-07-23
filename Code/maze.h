@@ -7,6 +7,7 @@
 #include "timer.h"
 #include "control.h"
 #include "uart.h"
+#include "sensor.h"
 
 #define VISITED(node)	(node & 0b0000100000000000)
 #define NORTH_Wall(node)(node & 0b0001000000000000)

@@ -14,6 +14,7 @@
 #include "control.h"
 //#include "uart.h"
 #include "sensor.h"
+#include "timer.h"
 
 int kp = 1;
 int ki = 1; // This integral might create initial integrated error overflow
@@ -172,10 +173,12 @@ void motor_control() {
     
     if (flag == 1) {
         int dist_front = distance('f');
-        if (frontWall() && dist_front != -1 && dist_front <= 20) {
-            fast_stop_motor('l');
-            fast_stop_motor('r');
+        if (frontWall() && dist_front != -1 && dist_front <= 30) {
+            fast_stop_motor('L');
+            fast_stop_motor('R');
             flag = 0;
+            stopTimer1();
+            flag = 5;
         }
      else if (flag == 1 && (rightWall() || leftWall())) {
         int dist_left = distance('l');
@@ -217,9 +220,9 @@ void go_one_cell() {
     To go more than one cell ahead, you have to set the flag to 0 manually and
     then call go_one_cell() again, otherwise it will only go one cell ahead*/
     
-    if (flag != 1) {
+    if (flag != 1 && flag != 5) {
         
-        int d = 1960;
+        int d = 2016;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);

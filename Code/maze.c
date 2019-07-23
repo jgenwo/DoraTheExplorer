@@ -219,12 +219,12 @@ void explore(){
 	int run = 1;
 	while(run){
         
-        sendNameValue("X", current_X);
-        sendNameValue("Y", current_Y);
-        sendNameValue("D", direction);
+        // sendNameValue("X", current_X);
+        // sendNameValue("Y", current_Y);
+        // sendNameValue("D", direction);
 		
 		//update Walls from sensor data
-		//setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
+		setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
 		
 		SET_VISITED(node[current_X][current_Y]);
 		
@@ -576,18 +576,15 @@ void setWalls(int X, int Y, char dir, int right, int left, int front){
 }
 
 int getRight(){
-	//TODO get sensor.c input
-	return 1;
+	return rightWall();
 }
 
 int getLeft(){
-	//TODO get sensor.c input
-	return 1;
+	return leftWall();
 }
 
 int getFront(){
-	//TODO get sensor.c input
-	return 1;
+	return frontWall();
 }
 
 //JUST for test purpose!!!!!!!!!

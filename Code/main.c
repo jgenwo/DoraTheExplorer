@@ -72,29 +72,19 @@ int main(void)
         while (OSCCONbits.LOCK != 1)
             ; //Wait for PPL to lock
     }
-    initUART();
+    //initUART();
     initIO();
     init_QEI(); // init QEI before timers cause one of the timer calls needs it
     initTimer1(6250); //6250 gives 10ms timer interrupt, based on a 1.6 us base = 40MIPS with 64 prescaler
     initTimer2(6250); //2600 gives 4.16ms timer interrupt, based on 40MIPs with 64 prescaler
-    startTimer1();
-    startTimer2();
     initDmaChannel4();
     setupADC1();
     startADC1();
     init_PWM();
+    startTimer1();
+    startTimer2();
     
-    //HBRIDGE1 = 0;
-    //HBRIDGE2 = 0;
-    
-    //HBRIDGE3 = 0;
-    //HBRIDGE4 = 0;
-      
-    //SetBorder has just to be called to add all orders manually until sensors work
-    // when sensors are working: setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
-    // in explore() has to be commented in to set the real borders
-    setBorder();
-    //explore();
+    //setBorder();
     
     //computes shortest path to (X;Y)
     //int X = 1, Y = 3;
