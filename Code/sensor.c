@@ -13,9 +13,9 @@
 int distance(char sensor){
     int ret, val;
     if (sensor == 'f')
-        val = adcData[0];
-    else if(sensor == 'r')
         val = adcData[1];
+    else if(sensor == 'r')
+        val = adcData[0];
     else
         val = adcData[2];
     
@@ -72,7 +72,7 @@ int distance(char sensor){
  *  returns 0 for no wall 1 for wall on the right side
 */
 int rightWall(){
-    if (adcData[1] < 1000 || adcData[1] > 3300)
+    if (adcData[0] < 1000 || adcData[0] > 3300)
         return 0;
     return 1;
 }
@@ -90,7 +90,7 @@ int leftWall(){
  *  returns 0 for no wall 1 for wall on the left side
 */
 int frontWall(){
-    if (adcData[2] < 1000 || adcData[2] > 3300)
+    if (adcData[1] < 1000 || adcData[1] > 3300)
         return 0;
     return 1;
 }
@@ -98,7 +98,7 @@ int frontWall(){
  *  returns 0 for yes, -1 for too much on the left, 1 for too much on the right
 */
 int middle(){
-    int difference = adcData[1] - adcData[2];
+    int difference = adcData[0] - adcData[2];
     if (difference < 200 && difference > -200)
         return 0;
     if (difference <= -200)

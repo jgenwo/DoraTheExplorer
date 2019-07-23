@@ -17,7 +17,7 @@ void initTimer1(unsigned int period)
     TMR1 = 0;
     PR1 = period - 1;  // set Timer 1 period register ()
     IFS0bits.T1IF = 0; // reset Timer 1 interrupt flag
-    IPC0bits.T1IP = 4; // set Timer1 interrupt priority level to 4
+    IPC0bits.T1IP = 7; // set Timer1 interrupt priority level to 4
     IEC0bits.T1IE = 1; // enable Timer 1 interrupt
     T1CONbits.TON = 0; // leave timer disabled initially
 }
@@ -50,7 +50,7 @@ void initTimer2(unsigned int period)
     
     PR2 = period - 1;  // set Timer 2 period register ()
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
-    IPC1bits.T2IP = 7; // set Timer2 interrupt priority level to 5
+    IPC1bits.T2IP = 5; // set Timer2 interrupt priority level to 5
     IEC0bits.T2IE = 1; // enable Timer 2 interrupt
     T2CONbits.TON = 0; // leave timer disabled initially
 }
@@ -129,7 +129,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
     }
     motor_control();
     
-    sendNameValue("F", adcData[0]);
-    sendNameValue("R", adcData[1]);
-    sendNameValue("L", adcData[2]);
+    //sendNameValue("F", distance('f'));
+    //sendNameValue("R", distance('r'));
+    //sendNameValue("L", distance('l'));
 }

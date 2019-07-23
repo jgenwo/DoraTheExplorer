@@ -21,7 +21,7 @@ void setupADC1()
     //ADCON1
 
     AD1CON1bits.ADON = 0; // disable ADC1 module
-    AD1PCFGL = 0xFFEC;     //  AN0,1 and 4  analog inputs
+    AD1PCFGL = 0xFFEC;     //  0b1111 1111 1110 1100 AN0,1 and 4  analog inputs
 
     AD1CON1bits.ADSIDL = 0;   //no sampling in idle mode
     AD1CON1bits.ADDMABM = 1;  //DMA channels are written in order of conversion
@@ -66,7 +66,7 @@ void setupADC1()
     AD1CON4bits.DMABL = 0b000; //<2:0>: Selects Number of DMA Buffer Locations per Analog Input bits
 
     //AD1CSSL (input scan select register)
-    AD1CSSL = 0b0000000000000111; //select the analog channels 0,1,4 and 5
+    AD1CSSL = 0b0000000000010011; //select the analog channels 0,1,4
 
     AD1CHS123bits.CH123NA = 0b00; //negative input for S/H 123 is Vref -
     AD1CHS123bits.CH123SA = 0b1;  //sample channel 4 and 5  on S/h 2 and 3

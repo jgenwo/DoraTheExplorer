@@ -93,7 +93,7 @@ void init_QEI(void)
     // Configure Interrupt controller for QEI 1 - first motor
     IFS3bits.QEI1IF = 0;  // clear interrupt flag
     IEC3bits.QEI1IE = 1;  // enable QEI interrupt
-    IPC14bits.QEI1IP = 5; // set QEI interrupt priority
+    IPC14bits.QEI1IP = 1; // set QEI interrupt priority
 
     // Configure Interrupt controller for QEI 2 - second motor
     IFS4bits.QEI2IF = 0;  // clear interrupt flag
