@@ -62,17 +62,17 @@ int time = 400;
 
 void driveSP(){
 	int i, n = strlen(path);
-    printf("%d ", n);
+    int t = 280;
 	for(i = n-1 ; i >= 0 ; i--){
 		char com = path[i];
 		if(com == 'f')
-			maze_forward(time);
+			maze_forward(t);
 		else if(com == 'r')
-			maze_turn_right(time);
+			maze_turn_right(t);
 		else if(com == 'l')
-			maze_turn_left(time);
+			maze_turn_left(t);
 		else if(com == 'b')
-			maze_turn_180(time);
+			maze_turn_180(t);
 	}
     stop();
 }
