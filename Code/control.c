@@ -15,13 +15,15 @@
 //#include "uart.h"
 #include "sensor.h"
 #include "timer.h"
+#include "dma.h"
+#include <stdio.h>
 
 int motor1_wanted_speed = 1.2;
 int motor2_wanted_speed = 1;
 
 int flag = 0;
 
-int correction = 1;
+int correction = 0.025;
 int correction2 = 0.5;
 
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
@@ -29,10 +31,17 @@ PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
 PID_Controller pos_control_right = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
 PID_Controller vel_control_left = {.kp =50, .ki = 5, .kd = 1,
+<<<<<<< Updated upstream
                                     .top_lim = 2000, .bot_lim = -2000,
                                     .int_lim = 100};
 PID_Controller vel_control_right = {.kp = 50, .ki = 5, .kd = 1,
                                     .top_lim = 2000, .bot_lim = -2000,
+=======
+                                    .top_lim = 2600, .bot_lim = -2600,
+                                    .int_lim = 100};
+PID_Controller vel_control_right = {.kp = 50, .ki = 5, .kd = 1,
+                                    .top_lim = 2600, .bot_lim = -2600,
+>>>>>>> Stashed changes
                                     .int_lim = 100};
 
 void test_go_straight(int speed) {
@@ -83,17 +92,6 @@ void motor_control() {
     vel_control_left.target = pos_control_left.value;
     vel_control_right.target = pos_control_right.value;
     
-    /*if (flag == 1 && frontWall() && distance('f')<= 20) {
-        if (distance('f') != -1) {
-            
-            fast_stop_motor('l');
-            fast_stop_motor('r');
-            flag = 0;
-        }
-    } else */
-    
-    
-    
     if (flag == 1) {
         int dist_front = distance('f');
         if (frontWall() && dist_front != -1) {
@@ -101,18 +99,22 @@ void motor_control() {
             flag = 10;
         }
      else if (flag == 1 && (rightWall() || leftWall())) {
-        int dist_left = distance('l');
-        if (dist_left == -1) {
-            dist_left = 0;
-        }
-        int dist_right = distance('r');
-        if (dist_right == -1) {
-            dist_right = 0;
-        }
+        int dist_left = adcData[2];
+        int dist_right = adcData[0];
         int dist_diff = dist_left - dist_right;
+        //printf("%d \n", dist_diff);
         if (rightWall() && leftWall()) {
+<<<<<<< Updated upstream
             vel_control_left.target -= (int)(correction*dist_diff);
             vel_control_right.target += (int)(correction*dist_diff);
+=======
+            
+            vel_control_left.target -= (int)correction*dist_diff;
+            vel_control_right.target += (int)correction*dist_diff;
+            printf("%ld \n", vel_control_left.target);
+            printf("%ld \n", vel_control_right.target);
+            printf("----- \n");
+>>>>>>> Stashed changes
         } else if (rightWall()) {
             int dist_miss = dist_right - 30;
             vel_control_left.target += (int)(correction2*dist_miss);

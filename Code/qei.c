@@ -140,11 +140,11 @@ void __attribute__((interrupt, no_auto_psv)) _QEI1Interrupt(void)
     IFS3bits.QEI1IF = 0;  // clear interrupt flag
     //less than half of maxcount 32768
     if (POS1CNT < 0x7fff) {
-      U1TXREG = 'o'; // Just for debugging purposes
+      //U1TXREG = 'o'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
       longpos1 += 0x10000; //overflow condition caused interrupt
     } else {
-      U1TXREG = 'u'; // Just for debugging purposes
+      //U1TXREG = 'u'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
       longpos1-= 0x10000; //underflow condition caused interrupt
     }
@@ -157,11 +157,11 @@ void __attribute__((interrupt, no_auto_psv)) _QEI2Interrupt(void)
     IFS4bits.QEI2IF = 0;  // clear interrupt flag
     //less than half of maxcount 32768
     if (POS2CNT < 0x7fff) {
-      U1TXREG = 'O'; // Just for debugging purposes
+      //U1TXREG = 'O'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
       longpos2 += 0x10000; //overflow condition caused interrupt
     } else {
-      U1TXREG = 'U'; // Just for debugging purposes
+      //U1TXREG = 'U'; // Just for debugging purposes
       // Saving count information in long variable in case of over/underflow
       longpos2 -= 0x10000; //underflow condition caused interrupt
     }
