@@ -16,7 +16,7 @@
 #include "sensor.h"
 #include "timer.h"
 
-int motor1_wanted_speed = 1;
+int motor1_wanted_speed = 1.2;
 int motor2_wanted_speed = 1;
 
 int flag = 0;
@@ -29,10 +29,10 @@ PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
 PID_Controller pos_control_right = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
 PID_Controller vel_control_left = {.kp =50, .ki = 5, .kd = 1,
-                                    .top_lim = 2000, .bot_lim = -2600,
+                                    .top_lim = 2000, .bot_lim = -2000,
                                     .int_lim = 100};
 PID_Controller vel_control_right = {.kp = 50, .ki = 5, .kd = 1,
-                                    .top_lim = 2000, .bot_lim = -2600,
+                                    .top_lim = 2000, .bot_lim = -2000,
                                     .int_lim = 100};
 
 void test_go_straight(int speed) {
@@ -111,16 +111,16 @@ void motor_control() {
         }
         int dist_diff = dist_left - dist_right;
         if (rightWall() && leftWall()) {
-            vel_control_left.target -= correction*dist_diff;
-            vel_control_right.target += correction*dist_diff;
+            vel_control_left.target -= (int)(correction*dist_diff);
+            vel_control_right.target += (int)(correction*dist_diff);
         } else if (rightWall()) {
-            int dist_miss = dist_right - 25;
-            vel_control_left.target += (int)correction2*dist_miss;
-            vel_control_right.target -= (int)correction2*dist_miss;
+            int dist_miss = dist_right - 30;
+            vel_control_left.target += (int)(correction2*dist_miss);
+            vel_control_right.target -= (int)(correction2*dist_miss);
         } else {
-            int dist_miss = dist_left - 25;
-            vel_control_left.target -= (int)correction2*dist_miss;
-            vel_control_right.target += (int)correction2*dist_miss;
+            int dist_miss = dist_left - 30;
+            vel_control_left.target -= (int)(correction2*dist_miss);
+            vel_control_right.target += (int)(correction2*dist_miss);
         }
     }
     }
@@ -158,7 +158,7 @@ void turn_right() {
     
     if (flag != 2) {
         
-        int t = 916;
+        int t = 924;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
@@ -174,7 +174,7 @@ void turn_left() {
     
     if (flag != 3) {
         
-        int t = 916;
+        int t = 924;
 
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
@@ -190,7 +190,7 @@ void turn_180() {
     
     if (flag != 4) {
         
-        int t = 1832;
+        int t = 1848;
 
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
