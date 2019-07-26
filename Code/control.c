@@ -12,7 +12,6 @@
 #include "gpio.h"
 #include "qei.h"
 #include "control.h"
-//#include "uart.h"
 #include "sensor.h"
 #include "timer.h"
 

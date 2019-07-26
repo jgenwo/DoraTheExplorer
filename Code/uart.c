@@ -16,7 +16,7 @@ int run;
 void initUART()
 {
     
-    IPC3bits.U1TXIP = 7;
+    IPC3bits.U1TXIP = 4;
 
     U1MODEbits.STSEL = 0;   // 1-Stop bit
     U1MODEbits.PDSEL = 0;   // No Parity, 8-Data bits

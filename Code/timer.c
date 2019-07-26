@@ -128,8 +128,4 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
         turn_180();  
     }
     motor_control();
-    
-    //sendNameValue("F", distance('f'));
-    //sendNameValue("R", distance('r'));
-    //sendNameValue("L", distance('l'));
 }
