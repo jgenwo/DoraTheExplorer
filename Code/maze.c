@@ -1,4 +1,5 @@
 #include "maze.h"
+#include "string.h"
 
 
 // HOW TO USE:
@@ -47,22 +48,24 @@ int last[6][6] = {
 			{-1,-1,-1,-1,-1,-1}
 			};
 
-char *path;	
+char path[36] = "";	
 
 // Time needed for 1 actual movement (turn,forward, etc.)
 //    int i, j;
 //    for (j = 0; j < time; j++)
 //        for (i = 0; i < 20000; i++)
 //            ; // short delay
-int time = 500;
+int time = 400;
 
 
 // executes the path computed in shortestPath
 
 void driveSP(){
 	int i, n = strlen(path);
+    printf("%d ", n);
 	for(i = n-1 ; i >= 0 ; i--){
 		char com = path[i];
+        printf("%c ", com);
 		if(com == 'f')
 			maze_forward(time);
 		else if(com == 'r')
@@ -72,6 +75,7 @@ void driveSP(){
 		else if(com == 'b')
 			maze_turn_180(time);
 	}
+    stop();
 }
 
 // computes the path from (0,0) to (X,Y) 
@@ -79,8 +83,7 @@ void driveSP(){
 // actually computes the way back from (X,Y) to (0,0) and is reversed by driveSP()
 
 void shortestPath(int X, int Y, int distance){
-	
-	path = (char*) malloc(distance*sizeof(char));
+	//path = (char*) malloc(distance*sizeof(char));
 	
 	char direction, next;
 	int i;
@@ -154,7 +157,6 @@ void shortestPath(int X, int Y, int distance){
 	
 	// compare (0,0) and current to compute the command to go from (0,0) to current
 	// direction has to be 'N' as we start in north direction
-	
 	if(x-last_x > 0){
 		if(direction == 'N')
 			path[distance-1] = 'f';
@@ -191,7 +193,7 @@ void shortestPath(int X, int Y, int distance){
 			path[distance-1] = 'f';
 		else if(direction == 'W')
 			path[distance-1] = 'r';
-	}		
+	}
 }
 			
 // explores the maze starting at (0,0) 
@@ -219,9 +221,9 @@ void explore(){
 	int run = 1;
 	while(run){
         
-        // sendNameValue("X", current_X);
-        // sendNameValue("Y", current_Y);
-        // sendNameValue("D", direction);
+        sendNameValue("X", current_X);
+        sendNameValue("Y", current_Y);
+        sendNameValue("D", direction);
 		
 		//update Walls from sensor data
 		setWalls(current_X, current_Y, direction, getRight(), getLeft(), getFront());
@@ -307,8 +309,7 @@ void explore(){
 			} else
 				run = 0;
 		}
-	}	
-	
+	}
 	//again update all distances
 	int i, j, k;
 	for(k = 0 ; k < 6 ; k++)
@@ -320,6 +321,24 @@ void explore(){
 				updateDistanceWest(i, j);
 			}
 		}
+    comm = 't';
+    wait(time);
+    flag = 0;
+    shortestPath(3, 1, DISTANCE(node[3][1]));
+    driveSP();
+    printf("DONE");
+}
+
+void printLast(){
+    int i, j;
+    printf("start\n");
+	for(i = 0 ; i < 6 ; i++){
+		for(j = 0 ; j < 6 ; j++){
+            printf("X:%3d Y:%3d  ", LAST_X(last[i][j]), LAST_Y(last[i][j]));
+        }
+        printf("\n");
+    }
+    printf("end\n");
 }
 
 // drives the robot to the last recent cell and returns the new direction
