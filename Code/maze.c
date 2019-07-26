@@ -65,7 +65,6 @@ void driveSP(){
     printf("%d ", n);
 	for(i = n-1 ; i >= 0 ; i--){
 		char com = path[i];
-        printf("%c ", com);
 		if(com == 'f')
 			maze_forward(time);
 		else if(com == 'r')
@@ -324,21 +323,8 @@ void explore(){
     comm = 't';
     wait(time);
     flag = 0;
-    shortestPath(3, 1, DISTANCE(node[3][1]));
+    shortestPath(2, 1, DISTANCE(node[2][1]));
     driveSP();
-    printf("DONE");
-}
-
-void printLast(){
-    int i, j;
-    printf("start\n");
-	for(i = 0 ; i < 6 ; i++){
-		for(j = 0 ; j < 6 ; j++){
-            printf("X:%3d Y:%3d  ", LAST_X(last[i][j]), LAST_Y(last[i][j]));
-        }
-        printf("\n");
-    }
-    printf("end\n");
 }
 
 // drives the robot to the last recent cell and returns the new direction
@@ -673,6 +659,17 @@ void printmaze(){
 		printf("\n");
 		printf("\n");
 	}
+}
+
+void printLast(){
+    int i, j;
+	for(i = 0 ; i < 6 ; i++){
+		for(j = 0 ; j < 6 ; j++){
+            printf("X:%3d Y:%3d  ", LAST_X(last[i][j]), LAST_Y(last[i][j]));
+        }
+        printf("\n");
+    }
+    printf("end\n");
 }
 
 //just an easy minimum function
