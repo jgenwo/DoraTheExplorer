@@ -31,17 +31,10 @@ PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
 PID_Controller pos_control_right = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
 PID_Controller vel_control_left = {.kp =50, .ki = 5, .kd = 1,
-<<<<<<< Updated upstream
                                     .top_lim = 2000, .bot_lim = -2000,
                                     .int_lim = 100};
 PID_Controller vel_control_right = {.kp = 50, .ki = 5, .kd = 1,
-                                    .top_lim = 2000, .bot_lim = -2000,
-=======
                                     .top_lim = 2600, .bot_lim = -2600,
-                                    .int_lim = 100};
-PID_Controller vel_control_right = {.kp = 50, .ki = 5, .kd = 1,
-                                    .top_lim = 2600, .bot_lim = -2600,
->>>>>>> Stashed changes
                                     .int_lim = 100};
 
 void test_go_straight(int speed) {
@@ -104,17 +97,8 @@ void motor_control() {
         int dist_diff = dist_left - dist_right;
         //printf("%d \n", dist_diff);
         if (rightWall() && leftWall()) {
-<<<<<<< Updated upstream
             vel_control_left.target -= (int)(correction*dist_diff);
             vel_control_right.target += (int)(correction*dist_diff);
-=======
-            
-            vel_control_left.target -= (int)correction*dist_diff;
-            vel_control_right.target += (int)correction*dist_diff;
-            printf("%ld \n", vel_control_left.target);
-            printf("%ld \n", vel_control_right.target);
-            printf("----- \n");
->>>>>>> Stashed changes
         } else if (rightWall()) {
             int dist_miss = dist_right - 30;
             vel_control_left.target += (int)(correction2*dist_miss);
