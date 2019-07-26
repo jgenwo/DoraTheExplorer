@@ -320,11 +320,19 @@ void explore(){
 				updateDistanceWest(i, j);
 			}
 		}
-    turn_180();
+    if (direction == 'S')
+        turn_180();
+    else 
+        turn_right();
     wait(time);
     flag = 0;
     shortestPath(2, 1, DISTANCE(node[2][1]));
     driveSP();
+    while(1){
+        turn_180();
+        wait(300);
+        flag = 0;
+    }
 }
 
 // drives the robot to the last recent cell and returns the new direction
