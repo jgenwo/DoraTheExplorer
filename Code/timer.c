@@ -80,8 +80,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
     }
 }
 
-char comm = ' ';
-
 // Timer that is there to constantly update the current speed of the motors
 // atm it's just one motor though.
 void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
@@ -114,18 +112,5 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
     calculate_speed('L'); // Call function from qei.c to calculate current speed
     calculate_speed('R'); // Call function from qei.c to calculate current speed2
-    
-    //comm is set in maze.c
-    //flag is reset in maze.c
-    //waiting time is included in maze.c
-    if(comm == 'f'){
-        go_one_cell();            
-    } else if(comm == 'r'){
-        turn_right();        
-    } else if (comm == 'l'){
-        turn_left();  
-    } else if (comm == 't'){
-        turn_180();  
-    }
     motor_control();
 }

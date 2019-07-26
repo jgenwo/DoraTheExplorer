@@ -8,7 +8,6 @@
 #ifndef TIMER_H
 #define TIMER_H
 #include "xc.h"
-extern char comm;
 void initTimer1(unsigned int period);
 void startTimer1(void);
 void stopTimer1(void);

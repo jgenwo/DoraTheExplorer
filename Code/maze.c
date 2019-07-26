@@ -320,7 +320,7 @@ void explore(){
 				updateDistanceWest(i, j);
 			}
 		}
-    comm = 't';
+    turn_180();
     wait(time);
     flag = 0;
     shortestPath(2, 1, DISTANCE(node[2][1]));
@@ -381,10 +381,10 @@ char driveToLast(int current_X, int current_Y, int new_X, int new_Y, char direct
 
 //turns the robot 180 degrees and goes one cell forward
 void maze_turn_180(int lim){
-    comm = 't';
+    turn_180();
     wait(lim);
     flag = 0;
-    comm = 'f';
+    go_one_cell();
     wait(lim);
     flag = 0;
 }
@@ -392,10 +392,10 @@ void maze_turn_180(int lim){
 //turns the robot right degrees and goes one cell forward
 
 void maze_turn_right(int lim){
-    comm = 'r';
+    turn_right();
     wait(lim);
     flag = 0;
-    comm = 'f';
+    go_one_cell();
     wait(lim);
     flag = 0;
 }
@@ -403,10 +403,10 @@ void maze_turn_right(int lim){
 //turns the robot left degrees and goes one cell forward
 
 void maze_turn_left(int lim){
-    comm = 'l';
+    turn_left();
     wait(lim);
     flag = 0;
-    comm = 'f';
+    go_one_cell();
     wait(lim);
     flag = 0;
 }
@@ -414,7 +414,7 @@ void maze_turn_left(int lim){
 //robot goes one cell forward
 
 void maze_forward(int lim){
-    comm = 'f';
+    go_one_cell();
     wait(lim);
     flag = 0;
 }

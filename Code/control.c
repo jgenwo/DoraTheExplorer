@@ -136,7 +136,7 @@ void go_one_cell() {
     
     if (flag != 1 && flag != 10) {
         
-        int d = 2016;
+        int d = 2000;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
@@ -151,12 +151,14 @@ void go_one_cell() {
 void turn_right() {
     
     if (flag != 2) {
+        
+        int t = 900;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
 
-        pos_control_left.target = current_pos1 + 932;
-        pos_control_right.target = current_pos2 - 932;
+        pos_control_left.target = current_pos1 + t;
+        pos_control_right.target = current_pos2 - t;
 
         flag = 2;
     }
@@ -165,12 +167,14 @@ void turn_right() {
 void turn_left() {
     
     if (flag != 3) {
+        
+        int t = 900;
 
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
 
-        pos_control_left.target = current_pos1 - 932;
-        pos_control_right.target = current_pos2 + 932;
+        pos_control_left.target = current_pos1 - t;
+        pos_control_right.target = current_pos2 + t;
 
         flag = 3;
     }
@@ -179,12 +183,14 @@ void turn_left() {
 void turn_180() {
     
     if (flag != 4) {
+        
+        int t = 1800;
 
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
 
-        pos_control_left.target = current_pos1 - 1864;
-        pos_control_right.target = current_pos2 + 1864;
+        pos_control_left.target = current_pos1 - t;
+        pos_control_right.target = current_pos2 + t;
 
         flag = 4;
     }
