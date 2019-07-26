@@ -94,7 +94,7 @@ void motor_control() {
     
     
     
-    if (flag == 1) {
+    if (flag == 1 || flag == 7) {
         int dist_front = distance('f');
         if (frontWall() && dist_front != -1) {
             approach_wall();
@@ -234,6 +234,22 @@ void approach_wall() {
 
         flag = 6;
     }    
+}
+
+void go_x_cells(int x_cells) {
+    
+    if (flag != 7 && flag != 10) {
+        
+        int d = x_cells*2000;
+    
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+    
+        pos_control_left.target = current_pos1 + d;
+        pos_control_right.target = current_pos2 + d;
+    
+        flag = 7;
+    }
 }
 
 

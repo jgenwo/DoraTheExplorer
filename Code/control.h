@@ -39,6 +39,7 @@ void turn_right();
 void turn_left();
 void turn_180();
 void approach_wall();
+void go_x_cells(int x_cells);
 
 #endif	
 
