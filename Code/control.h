@@ -17,6 +17,8 @@ typedef struct
     int top_lim;
     int bot_lim;
     
+    int int_lim;
+    
     long int target;
 } PID_Controller;
 
