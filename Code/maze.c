@@ -389,34 +389,45 @@ char driveToLast(int current_X, int current_Y, int new_X, int new_Y, char direct
 
 //turns the robot 180 degrees and goes one cell forward
 void maze_turn_180(int lim){
+    LED_Left = ON;
+    LED_Right = ON;
     turn_180();
     wait(lim);
     flag = 0;
     go_one_cell();
+    LED_Left = OFF;
+    LED_Right = OFF;
     wait(lim);
     flag = 0;
+
 }
 
 //turns the robot right degrees and goes one cell forward
 
 void maze_turn_right(int lim){
+    LED_Right = ON;
     turn_right();
     wait(lim);
     flag = 0;
     go_one_cell();
+    LED_Right = OFF;
     wait(lim);
     flag = 0;
+    
 }
 
 //turns the robot left degrees and goes one cell forward
 
 void maze_turn_left(int lim){
+    LED_Left = ON;
     turn_left();
     wait(lim);
     flag = 0;
     go_one_cell();
+    LED_Left = OFF;
     wait(lim);
     flag = 0;
+    
 }
 
 //robot goes one cell forward

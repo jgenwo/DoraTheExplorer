@@ -1,7 +1,7 @@
 
 #include "timer.h"
 #include "gpio.h"
-#include "xc.h"
+#include <xc.h>
 #include "qei.h"
 #include "control.h"
 #include "uart.h"

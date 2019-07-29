@@ -12,8 +12,10 @@ void initIO()
     TRISBbits.TRISB14 = 1; //BUTTON
     
     //outputs
-    TRISBbits.TRISB12 = 0; //LEDBack output 
-    TRISAbits.TRISA8 = 0; //LEDFront output
+    TRISBbits.TRISB12 = 0; //LED_Back output 
+    TRISAbits.TRISA8 = 0; //LED_Front output
+    TRISBbits.TRISB3 = 0; //LED_Left output
+    TRISCbits.TRISC0 = 0; //LED_Right output
 
     // ******* Configure two bits as output bits for the first hbridge
     TRISAbits.TRISA7 = 0;
