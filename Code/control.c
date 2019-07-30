@@ -18,21 +18,13 @@
 #include "dma.h"
 #include <stdio.h>
 
-int i;
+
 int flag = 0;
 
-int correction = 1;
-int correction2 = 0.5;
-
-int sliding_window_size = 3;
-int left_sliding_window[3] = {0,0,0};
-int right_sliding_window[3] = {0,0,0};
+float correction = 0.8;
+float correction2 = 0.2;
 
 
-
-
-int dist_left = 0;
-int dist_right = 0;
 
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
@@ -93,24 +85,8 @@ void motor_control() {
     vel_control_left.target = pos_control_left.value;
     vel_control_right.target = pos_control_right.value;
     
-    int measure_dist_left = adcData[2];
-    int measure_dist_right = adcData[0];
-    dist_left = 0;
-    dist_right = 0;
-    for (i = 0; i < sliding_window_size-1; i++) {
-        left_sliding_window[i] = left_sliding_window[i+1];
-        dist_left += left_sliding_window[i+1];
-        right_sliding_window[i] = right_sliding_window[i+1];
-        dist_right += right_sliding_window[i+1];
-    }
-    left_sliding_window[sliding_window_size] = measure_dist_left;
-    dist_left += measure_dist_left;
-    right_sliding_window[sliding_window_size] = measure_dist_right;
-    dist_right += measure_dist_right;
-    
-    dist_left = dist_left/sliding_window_size;
-    
-    
+    int dist_left = adcData[2];
+    int dist_right = adcData[0];
     
     if (flag == 1|| flag == 7) {
         int dist_front = distance('f');
