@@ -15,14 +15,24 @@
 //#include "uart.h"
 #include "sensor.h"
 #include "timer.h"
+#include "dma.h"
+#include <stdio.h>
 
-int motor1_wanted_speed = 1.2;
-int motor2_wanted_speed = 1;
-
+int i;
 int flag = 0;
 
 int correction = 1;
 int correction2 = 0.5;
+
+int sliding_window_size = 3;
+int left_sliding_window[3] = {0,0,0};
+int right_sliding_window[3] = {0,0,0};
+
+
+
+
+int dist_left = 0;
+int dist_right = 0;
 
 PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
@@ -76,6 +86,56 @@ void evaluate_controller(PID_Controller *controller, long int current_control_va
 }
 
 void motor_control() {
+    
+    evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
+    evaluate_controller(&pos_control_right, (long)(longpos2 + POS2CNT));
+    
+    vel_control_left.target = pos_control_left.value;
+    vel_control_right.target = pos_control_right.value;
+    
+    int measure_dist_left = adcData[2];
+    int measure_dist_right = adcData[0];
+    dist_left = 0;
+    dist_right = 0;
+    for (i = 0; i < sliding_window_size-1; i++) {
+        left_sliding_window[i] = left_sliding_window[i+1];
+        dist_left += left_sliding_window[i+1];
+        right_sliding_window[i] = right_sliding_window[i+1];
+        dist_right += right_sliding_window[i+1];
+    }
+    left_sliding_window[sliding_window_size] = measure_dist_left;
+    dist_left += measure_dist_left;
+    right_sliding_window[sliding_window_size] = measure_dist_right;
+    dist_right += measure_dist_right;
+    
+    dist_left = dist_left/sliding_window_size;
+    
+    
+    
+    if (flag == 1|| flag == 7) {
+        int dist_front = distance('f');
+        if (frontWall() && dist_front != -1) {
+            approach_wall();
+            flag = 10;
+        }
+     else if (flag == 1 && (rightWall() || leftWall())) {
+        
+        int dist_diff = dist_left - dist_right;
+        //printf("%d \n", dist_diff);
+        if (rightWall() && leftWall()) {
+            vel_control_left.target -= (int)(correction*dist_diff);
+            vel_control_right.target += (int)(correction*dist_diff);
+        } else if (rightWall()) {
+            int dist_miss = dist_right - 1800;
+            vel_control_left.target += (int)(correction2*dist_miss);
+            vel_control_right.target -= (int)(correction2*dist_miss);
+        } else {
+            int dist_miss = dist_left - 1800;
+            vel_control_left.target -= (int)(correction2*dist_miss);
+            vel_control_right.target += (int)(correction2*dist_miss);
+        }
+    }
+    }
     
     evaluate_controller(&pos_control_left, (long)(longpos1 + POS1CNT));
     evaluate_controller(&pos_control_right, (long)(longpos2 + POS2CNT));
@@ -251,6 +311,7 @@ void go_x_cells(int x_cells) {
         flag = 7;
     }
 }
+
 
 
 
