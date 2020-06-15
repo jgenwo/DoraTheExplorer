@@ -1,7 +1,7 @@
 
 #include "timer.h"
 #include "gpio.h"
-#include "xc.h"
+#include <xc.h>
 #include "qei.h"
 #include "control.h"
 #include "uart.h"
@@ -17,7 +17,7 @@ void initTimer1(unsigned int period)
     TMR1 = 0;
     PR1 = period - 1;  // set Timer 1 period register ()
     IFS0bits.T1IF = 0; // reset Timer 1 interrupt flag
-    IPC0bits.T1IP = 7; // set Timer1 interrupt priority level to 4
+    IPC0bits.T1IP = 5; // set Timer1 interrupt priority level to 4
     IEC0bits.T1IE = 1; // enable Timer 1 interrupt
     T1CONbits.TON = 0; // leave timer disabled initially
 }
@@ -50,7 +50,7 @@ void initTimer2(unsigned int period)
     
     PR2 = period - 1;  // set Timer 2 period register ()
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
-    IPC1bits.T2IP = 5; // set Timer2 interrupt priority level to 5
+    IPC1bits.T2IP = 6; // set Timer2 interrupt priority level to 5
     IEC0bits.T2IE = 1; // enable Timer 2 interrupt
     T2CONbits.TON = 0; // leave timer disabled initially
 }
@@ -79,8 +79,6 @@ void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt(void)
         count = 0;
     }
 }
-
-char comm = ' ';
 
 // Timer that is there to constantly update the current speed of the motors
 // atm it's just one motor though.
@@ -114,22 +112,5 @@ void __attribute__((__interrupt__, no_auto_psv)) _T2Interrupt(void)
     IFS0bits.T2IF = 0; // reset Timer 2 interrupt flag
     calculate_speed('L'); // Call function from qei.c to calculate current speed
     calculate_speed('R'); // Call function from qei.c to calculate current speed2
-    
-    //comm is set in maze.c
-    //flag is reset in maze.c
-    //waiting time is included in maze.c
-    if(comm == 'f'){
-        go_one_cell();            
-    } else if(comm == 'r'){
-        turn_right();        
-    } else if (comm == 'l'){
-        turn_left();  
-    } else if (comm == 't'){
-        turn_180();  
-    }
     motor_control();
-    
-    //sendNameValue("F", distance('f'));
-    //sendNameValue("R", distance('r'));
-    //sendNameValue("L", distance('l'));
 }

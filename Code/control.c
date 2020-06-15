@@ -16,7 +16,11 @@
 #include "sensor.h"
 #include "timer.h"
 
+<<<<<<< HEAD
 int motor1_wanted_speed = 1;
+=======
+int motor1_wanted_speed = 1.2;
+>>>>>>> master
 int motor2_wanted_speed = 1;
 
 int flag = 0;
@@ -28,10 +32,19 @@ PID_Controller pos_control_left = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
 PID_Controller pos_control_right = {.kp = 1, .ki = 0, .kd = 0,
                                     .top_lim = 30, .bot_lim = -30};
+<<<<<<< HEAD
 PID_Controller vel_control_left = {.kp =50, .ki = 0, .kd = 1,
                                     .top_lim = 2000, .bot_lim = -2000};
 PID_Controller vel_control_right = {.kp = 50, .ki = 0, .kd = 1,
                                     .top_lim = 2000, .bot_lim = -2000};
+=======
+PID_Controller vel_control_left = {.kp =50, .ki = 5, .kd = 1,
+                                    .top_lim = 2000, .bot_lim = -2000,
+                                    .int_lim = 100};
+PID_Controller vel_control_right = {.kp = 50, .ki = 5, .kd = 1,
+                                    .top_lim = 2000, .bot_lim = -2000,
+                                    .int_lim = 100};
+>>>>>>> master
 
 void test_go_straight(int speed) {
     vel_control_left.target = (long)speed;
@@ -52,6 +65,10 @@ void evaluate_controller(PID_Controller *controller, long int current_control_va
     (*controller).error = (*controller).target - current_control_value ;
     
     (*controller).integral = (*controller).integral + (*controller).error;
+    
+    if ((*controller).integral > (*controller).int_lim) {
+        (*controller).integral = (*controller).int_lim;
+    }
     
     (*controller).derivative = (*controller).error - (*controller).last_error;
     
@@ -88,7 +105,7 @@ void motor_control() {
     
     
     
-    if (flag == 1) {
+    if (flag == 1 || flag == 7) {
         int dist_front = distance('f');
         if (frontWall() && dist_front != -1) {
             approach_wall();
@@ -108,6 +125,7 @@ void motor_control() {
             vel_control_left.target -= (int)(correction*dist_diff);
             vel_control_right.target += (int)(correction*dist_diff);
         } else if (rightWall()) {
+<<<<<<< HEAD
             int dist_miss = dist_right - 25;
             //vel_control_left.target += (int)(correction2*dist_miss);
             vel_control_right.target -= (int)(correction2*dist_miss);
@@ -115,6 +133,15 @@ void motor_control() {
             int dist_miss = dist_left - 25;
             vel_control_left.target -= (int)(correction2*dist_miss);
             //vel_control_right.target += (int)(correction2*dist_miss);
+=======
+            int dist_miss = dist_right - 30;
+            vel_control_left.target += (int)(correction2*dist_miss);
+            vel_control_right.target -= (int)(correction2*dist_miss);
+        } else {
+            int dist_miss = dist_left - 30;
+            vel_control_left.target -= (int)(correction2*dist_miss);
+            vel_control_right.target += (int)(correction2*dist_miss);
+>>>>>>> master
         }
     }
     }
@@ -136,7 +163,7 @@ void go_one_cell() {
     
     if (flag != 1 && flag != 10) {
         
-        int d = 2016;
+        int d = 2000;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
@@ -151,12 +178,19 @@ void go_one_cell() {
 void turn_right() {
     
     if (flag != 2) {
+        
+        int t = 924;
     
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
 
+<<<<<<< HEAD
         pos_control_left.target = current_pos1 + 924;
         pos_control_right.target = current_pos2 - 924;
+=======
+        pos_control_left.target = current_pos1 + t;
+        pos_control_right.target = current_pos2 - t;
+>>>>>>> master
 
         flag = 2;
     }
@@ -165,12 +199,19 @@ void turn_right() {
 void turn_left() {
     
     if (flag != 3) {
+        
+        int t = 924;
 
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
 
+<<<<<<< HEAD
         pos_control_left.target = current_pos1 - 924;
         pos_control_right.target = current_pos2 + 924;
+=======
+        pos_control_left.target = current_pos1 - t;
+        pos_control_right.target = current_pos2 + t;
+>>>>>>> master
 
         flag = 3;
     }
@@ -179,12 +220,14 @@ void turn_left() {
 void turn_180() {
     
     if (flag != 4) {
+        
+        int t = 1848;
 
         GET_ENCODER_VALUE_1(current_pos1);
         GET_ENCODER_VALUE_2(current_pos2);
 
-        pos_control_left.target = current_pos1 - 1864;
-        pos_control_right.target = current_pos2 + 1864;
+        pos_control_left.target = current_pos1 - t;
+        pos_control_right.target = current_pos2 + t;
 
         flag = 4;
     }
@@ -199,6 +242,7 @@ void stop() {
        
         pos_control_left.target = current_pos1;
         pos_control_right.target = current_pos2;
+<<<<<<< HEAD
 
         flag = 5;
     }
@@ -222,6 +266,47 @@ void approach_wall() {
 
         flag = 6;
     }    
+=======
+
+        flag = 5;
+    }
+}
+
+void approach_wall() {
+    
+    static int desired_dist = 10;
+    
+    if (flag != 6 && frontWall()) {
+        
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+        
+        int miss_value = distance('f') - desired_dist;
+        
+        int correction_value = (int)(miss_value * 11.2);
+                
+        pos_control_left.target = current_pos1 + correction_value;
+        pos_control_right.target = current_pos2 + correction_value;
+
+        flag = 6;
+    }    
+}
+
+void go_x_cells(int x_cells) {
+    
+    if (flag != 7 && flag != 10) {
+        
+        int d = x_cells*2000;
+    
+        GET_ENCODER_VALUE_1(current_pos1);
+        GET_ENCODER_VALUE_2(current_pos2);
+    
+        pos_control_left.target = current_pos1 + d;
+        pos_control_right.target = current_pos2 + d;
+    
+        flag = 7;
+    }
+>>>>>>> master
 }
 
 

@@ -12,7 +12,9 @@
 #define BUTTON PORTBbits.RB14 //BUTTON
 
 #define LED_Back  LATBbits.LATB12 
-#define LED_Front LATAbits.LATA8 // not assembled yet
+#define LED_Front LATAbits.LATA8 
+#define LED_Left LATBbits.LATB3 //Left LED
+#define LED_Right LATCbits.LATC0 
  
 //******* Define two bits as output bits for the first H-Bridge
 #define HBRIDGE1 LATAbits.LATA7 

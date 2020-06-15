@@ -83,6 +83,7 @@ int main(void)
     init_PWM();
     startTimer1();
     startTimer2();
+<<<<<<< HEAD
      //comm = 't';
     //wait(500);
     //flag = 0;
@@ -91,6 +92,9 @@ int main(void)
     //shortestPath(X, Y, DISTANCE(last[X][Y]));
     //drives the shortest Path
     //driveSP();
+=======
+     
+>>>>>>> master
     while(1){
         if(BUTTON) {
             explore();

@@ -17,6 +17,8 @@ typedef struct
     int top_lim;
     int bot_lim;
     
+    int int_lim;
+    
     long int target;
 } PID_Controller;
 
@@ -37,6 +39,10 @@ void turn_right();
 void turn_left();
 void turn_180();
 void approach_wall();
+<<<<<<< HEAD
+=======
+void go_x_cells(int x_cells);
+>>>>>>> master
 
 #endif	
 

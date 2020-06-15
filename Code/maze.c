@@ -1,4 +1,5 @@
 #include "maze.h"
+#include "string.h"
 
 
 // HOW TO USE:
@@ -47,31 +48,33 @@ int last[6][6] = {
 			{-1,-1,-1,-1,-1,-1}
 			};
 
-char *path;	
+char path[36] = "";	
 
 // Time needed for 1 actual movement (turn,forward, etc.)
 //    int i, j;
 //    for (j = 0; j < time; j++)
 //        for (i = 0; i < 20000; i++)
 //            ; // short delay
-int time = 500;
+int time = 400;
 
 
 // executes the path computed in shortestPath
 
 void driveSP(){
 	int i, n = strlen(path);
+    int t = 280;
 	for(i = n-1 ; i >= 0 ; i--){
 		char com = path[i];
 		if(com == 'f')
-			maze_forward(time);
+			maze_forward(t);
 		else if(com == 'r')
-			maze_turn_right(time);
+			maze_turn_right(t);
 		else if(com == 'l')
-			maze_turn_left(time);
+			maze_turn_left(t);
 		else if(com == 'b')
-			maze_turn_180(time);
+			maze_turn_180(t);
 	}
+    stop();
 }
 
 // computes the path from (0,0) to (X,Y) 
@@ -79,8 +82,7 @@ void driveSP(){
 // actually computes the way back from (X,Y) to (0,0) and is reversed by driveSP()
 
 void shortestPath(int X, int Y, int distance){
-	
-	path = (char*) malloc(distance*sizeof(char));
+	//path = (char*) malloc(distance*sizeof(char));
 	
 	char direction, next;
 	int i;
@@ -154,7 +156,6 @@ void shortestPath(int X, int Y, int distance){
 	
 	// compare (0,0) and current to compute the command to go from (0,0) to current
 	// direction has to be 'N' as we start in north direction
-	
 	if(x-last_x > 0){
 		if(direction == 'N')
 			path[distance-1] = 'f';
@@ -191,7 +192,7 @@ void shortestPath(int X, int Y, int distance){
 			path[distance-1] = 'f';
 		else if(direction == 'W')
 			path[distance-1] = 'r';
-	}		
+	}
 }
 			
 // explores the maze starting at (0,0) 
@@ -307,8 +308,7 @@ void explore(){
 			} else
 				run = 0;
 		}
-	}	
-	
+	}
 	//again update all distances
 	int i, j, k;
 	for(k = 0 ; k < 6 ; k++)
@@ -320,6 +320,19 @@ void explore(){
 				updateDistanceWest(i, j);
 			}
 		}
+    if (direction == 'S')
+        turn_180();
+    else 
+        turn_right();
+    wait(time);
+    flag = 0;
+    shortestPath(2, 1, DISTANCE(node[2][1]));
+    driveSP();
+    while(1){
+        turn_180();
+        wait(300);
+        flag = 0;
+    }
 }
 
 // drives the robot to the last recent cell and returns the new direction
@@ -376,40 +389,51 @@ char driveToLast(int current_X, int current_Y, int new_X, int new_Y, char direct
 
 //turns the robot 180 degrees and goes one cell forward
 void maze_turn_180(int lim){
-    comm = 't';
+    LED_Left = ON;
+    LED_Right = ON;
+    turn_180();
     wait(lim);
     flag = 0;
-    comm = 'f';
+    go_one_cell();
+    LED_Left = OFF;
+    LED_Right = OFF;
     wait(lim);
     flag = 0;
+
 }
 
 //turns the robot right degrees and goes one cell forward
 
 void maze_turn_right(int lim){
-    comm = 'r';
+    LED_Right = ON;
+    turn_right();
     wait(lim);
     flag = 0;
-    comm = 'f';
+    go_one_cell();
+    LED_Right = OFF;
     wait(lim);
     flag = 0;
+    
 }
 
 //turns the robot left degrees and goes one cell forward
 
 void maze_turn_left(int lim){
-    comm = 'l';
+    LED_Left = ON;
+    turn_left();
     wait(lim);
     flag = 0;
-    comm = 'f';
+    go_one_cell();
+    LED_Left = OFF;
     wait(lim);
     flag = 0;
+    
 }
 
 //robot goes one cell forward
 
 void maze_forward(int lim){
-    comm = 'f';
+    go_one_cell();
     wait(lim);
     flag = 0;
 }
@@ -654,6 +678,17 @@ void printmaze(){
 		printf("\n");
 		printf("\n");
 	}
+}
+
+void printLast(){
+    int i, j;
+	for(i = 0 ; i < 6 ; i++){
+		for(j = 0 ; j < 6 ; j++){
+            printf("X:%3d Y:%3d  ", LAST_X(last[i][j]), LAST_Y(last[i][j]));
+        }
+        printf("\n");
+    }
+    printf("end\n");
 }
 
 //just an easy minimum function

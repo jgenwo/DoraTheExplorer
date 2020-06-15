@@ -6,17 +6,10 @@
  */
 
 #include "uart.h"
-#include "qei.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-int run;
 
 void initUART()
 {
-    
-    IPC3bits.U1TXIP = 7;
+    IPC3bits.U1TXIP = 5;
 
     U1MODEbits.STSEL = 0;   // 1-Stop bit
     U1MODEbits.PDSEL = 0;   // No Parity, 8-Data bits
@@ -29,7 +22,7 @@ void initUART()
     U1STAbits.URXISEL = 0; // Interrupt after one RX character is received;
     IFS0bits.U1RXIF = 0;
     IEC0bits.U1RXIE = 1;
-    IPC2bits.U1RXIP = 4;
+    IPC2bits.U1RXIP = 5;
     
     IEC0bits.U1TXIE = 1;   // Enable UART TX interrupt
     U1MODEbits.UARTEN = 1; // Enable UART

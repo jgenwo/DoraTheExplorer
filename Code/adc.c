@@ -74,5 +74,5 @@ void setupADC1()
 
     IFS0bits.AD1IF = 0;
     IEC0bits.AD1IE = 0;
-    IPC3bits.AD1IP = 5;
+    IPC3bits.AD1IP = 6;
 }
